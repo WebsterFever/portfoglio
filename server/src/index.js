@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -19,22 +18,24 @@ const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
 app.use(express.json());
 
-// Serve uploaded images statically
+// Serve uploaded images statically (server/uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API routes
 app.use('/api/projects', projectsRouter);
 
 // Health check
-app.get('/api/health', (req, res) => res.json({ ok: true }));
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 // Start server after DB connection
 (async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync(); // For a simple app; in production consider migrations
+    await sequelize.sync(); // simples; para apps maiores use migrations
     console.log('DB connected & models synced.');
-    app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    app.listen(PORT, () =>
+      console.log(`Server running on http://localhost:${PORT}`)
+    );
   } catch (err) {
     console.error('Failed to start:', err);
     process.exit(1);

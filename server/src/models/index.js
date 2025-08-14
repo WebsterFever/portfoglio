@@ -1,23 +1,28 @@
-
-import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-import ProjectModel from './project.js';
-
 dotenv.config();
 
-const {
-  DB_HOST,
-  DB_PORT,
-  DB_NAME,
-  DB_USER,
-  DB_PASS,
-} = process.env;
+import { Sequelize } from 'sequelize';
+import ProjectFactory from './project.js';
 
-export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
-  host: DB_HOST,
-  port: DB_PORT || 5432,
-  dialect: 'postgres',
-  logging: false,
-});
+const isProd = !!process.env.DATABASE_URL;
 
-export const Project = ProjectModel(sequelize);
+export const sequelize = isProd
+  ? new Sequelize(process.env.DATABASE_URL, {
+      dialect: 'postgres',
+      protocol: 'postgres',
+      logging: false,
+      dialectOptions: {
+        // Neon exige TLS
+        ssl: { require: true, rejectUnauthorized: false },
+      },
+    })
+  : new Sequelize({
+      dialect: 'sqlite',
+      storage: './dev.sqlite', // arquivo local para desenvolvimento
+      logging: false,
+    });
+
+// init models
+export const Project = ProjectFactory(sequelize);
+
+export default { sequelize, Project };

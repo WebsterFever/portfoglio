@@ -1,95 +1,134 @@
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-import { Router } from 'express';
 import { Project } from '../models/index.js';
 import { upload } from '../middleware/upload.js';
 
-const router = Router();
+const router = express.Router();
 
-// Admin code guard
-const ADMIN_CODE = process.env.ADMIN_CODE || '';
-const checkCode = (req, res, next) => {
-  const headerCode = req.headers['x-portfolio-code'] || req.headers['x-admin-code'];
-  const bodyCode = req.body?.code;
-  const provided = headerCode || bodyCode;
-  if (!ADMIN_CODE) {
-    return res.status(500).json({ message: 'Server missing ADMIN_CODE' });
-  }
-  if (!provided || String(provided) !== String(ADMIN_CODE)) {
-    return res.status(401).json({ message: 'Invalid or missing admin code' });
-  }
-  next();
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// CREATE (with optional image upload) - protected
-router.post('/', checkCode, upload.single('image'), async (req, res) => {
+// helper: resolve '/uploads/xxx' to absolute path
+const toAbsUploadPath = (maybeSlashPath) =>
+  path.join(__dirname, '..', '..', maybeSlashPath.replace(/^\//, ''));
+
+// ---- Routes ----
+
+// GET /api/projects
+router.get('/', async (_req, res) => {
+  const items = await Project.findAll({ order: [['createdAt', 'DESC']] });
+  res.json(items);
+});
+
+// GET /api/projects/:id
+router.get('/:id', async (req, res) => {
+  const item = await Project.findByPk(req.params.id);
+  if (!item) return res.status(404).json({ message: 'Not found' });
+  res.json(item);
+});
+
+// POST /api/projects   (multipart form, field: image)
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     const { title, link, description, tags } = req.body;
-    if (!title || !link) {
+    if (!title || !link)
       return res.status(400).json({ message: 'title and link are required' });
-    }
 
-    const tagArray = typeof tags === 'string' && tags.length
-      ? tags.split(',').map(t => t.trim()).filter(Boolean)
-      : null;
+    // tags can come as JSON string, comma string, or array
+    let parsedTags = null;
+    if (tags !== undefined) {
+      if (Array.isArray(tags)) {
+        parsedTags = tags;
+      } else if (typeof tags === 'string') {
+        try {
+          parsedTags = JSON.parse(tags); // try JSON
+          if (!Array.isArray(parsedTags)) parsedTags = null;
+        } catch {
+          parsedTags = tags
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+        }
+      }
+    }
 
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
-    const project = await Project.create({ title, link, description, imagePath, tags: tagArray });
-    res.status(201).json(project);
-  } catch (err) {
-    console.error(err);
+    const created = await Project.create({
+      title,
+      link,
+      description,
+      tags: parsedTags,
+      imagePath,
+    });
+
+    res.status(201).json(created);
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ message: 'Failed to create project' });
   }
 });
 
-// LIST (no auth)
-router.get('/', async (req, res) => {
+// PUT /api/projects/:id  (multipart form, field: image)
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
-    const items = await Project.findAll({ order: [['created_at', 'DESC']] });
-    res.json(items);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Failed to fetch projects' });
-  }
-});
+    const item = await Project.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ message: 'Not found' });
 
-// UPDATE - protected
-router.put('/:id', checkCode, upload.single('image'), async (req, res) => {
-  try {
-    const id = parseInt(req.params.id, 10);
     const { title, link, description, tags } = req.body;
 
-    const project = await Project.findByPk(id);
-    if (!project) return res.status(404).json({ message: 'Project not found' });
-
-    const updates = {};
-    if (title) updates.title = title;
-    if (link) updates.link = link;
-    if (description) updates.description = description;
-    if (typeof tags === 'string') {
-      updates.tags = tags.split(',').map(t => t.trim()).filter(Boolean);
+    let parsedTags = item.tags;
+    if (tags !== undefined) {
+      if (Array.isArray(tags)) parsedTags = tags;
+      else if (typeof tags === 'string') {
+        try {
+          parsedTags = JSON.parse(tags);
+          if (!Array.isArray(parsedTags)) parsedTags = item.tags;
+        } catch {
+          parsedTags = tags
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+        }
+      }
     }
+
+    let imagePath = item.imagePath;
     if (req.file) {
-      updates.imagePath = `/uploads/${req.file.filename}`;
+      // delete old image quietly
+      if (imagePath) {
+        const abs = toAbsUploadPath(imagePath);
+        fs.promises.unlink(abs).catch(() => {});
+      }
+      imagePath = `/uploads/${req.file.filename}`;
     }
 
-    await project.update(updates);
-    res.json(project);
-  } catch (err) {
-    console.error(err);
+    await item.update({ title, link, description, tags: parsedTags, imagePath });
+    res.json(item);
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ message: 'Failed to update project' });
   }
 });
 
-// DELETE - protected
-router.delete('/:id', checkCode, async (req, res) => {
+// DELETE /api/projects/:id
+router.delete('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const count = await Project.destroy({ where: { id } });
-    if (!count) return res.status(404).json({ message: 'Project not found' });
+    const item = await Project.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ message: 'Not found' });
+
+    if (item.imagePath) {
+      const abs = toAbsUploadPath(item.imagePath);
+      fs.promises.unlink(abs).catch(() => {});
+    }
+
+    await item.destroy();
     res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ message: 'Failed to delete project' });
   }
 });
