@@ -1,10 +1,8 @@
-// // server/src/models/project.js
 import { DataTypes } from 'sequelize';
 
 export default (sequelize) => {
   const dialect = sequelize.getDialect();
-
-  // ARRAY on Postgres, JSON on SQLite (works on both)
+  // ARRAY no Postgres, JSON no SQLite (compatível nos dois)
   const TagsType =
     dialect === 'postgres' ? DataTypes.ARRAY(DataTypes.STRING) : DataTypes.JSON;
 
@@ -12,33 +10,21 @@ export default (sequelize) => {
     'Project',
     {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-
       title: { type: DataTypes.STRING(200), allowNull: false },
-
       link: { type: DataTypes.STRING(2048), allowNull: false },
-
-      // e.g. '/uploads/filename.jpg'
-      imagePath: { type: DataTypes.STRING(512), allowNull: true },
-
+      imagePath: { type: DataTypes.STRING(512), allowNull: true }, // ex.: '/uploads/filename.jpg'
       description: { type: DataTypes.TEXT, allowNull: true },
-
       tags: {
         type: TagsType,
         allowNull: true,
-        // default for SQLite/JSON, Postgres uses NULL by default
+        // default para SQLite/JSON
         defaultValue: dialect === 'postgres' ? null : [],
       },
-
-      // NEW: when it was developed/launched (YYYY-MM-DD)
-      developedAt: { type: DataTypes.DATEONLY, allowNull: true },
-
-      // NEW: whether the project is still in production
-      inProduction: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     },
     {
       tableName: 'projects',
-      underscored: true, // DB columns will be snake_case (e.g., developed_at)
-      timestamps: true,  // created_at, updated_at
+      underscored: true,
+      timestamps: true,
     }
   );
 
