@@ -28,11 +28,11 @@ const CLIENT_ORIGIN_ENV = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
  */
 const ALLOWED_ORIGINS = CLIENT_ORIGIN_ENV
   .split(',')
-  .map(s => s.trim())
+  .map((s) => s.trim())
   .filter(Boolean);
 
 // ---- Strict CORS / Preflight (no external deps) ----
-// This guarantees preflight OPTIONS always returns the proper headers.
+// Guarantees preflight OPTIONS always returns proper headers.
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
@@ -44,10 +44,7 @@ app.use((req, res, next) => {
 
     // Echo requested headers if provided, otherwise fallback to common ones
     const reqHeaders = req.headers['access-control-request-headers'];
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      reqHeaders || 'Content-Type,Authorization'
-    );
+    res.setHeader('Access-Control-Allow-Headers', reqHeaders || 'Content-Type,Authorization');
 
     // We are not using cookies; keep this "false" unless you use credentials on fetch()
     res.setHeader('Access-Control-Allow-Credentials', 'false');
@@ -65,13 +62,25 @@ app.use(express.json({ limit: '10mb' }));
 // ---- Static files (uploaded images live in server/uploads) ----
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// ---- Debug logger for /api ----
+app.use('/api', (req, _res, next) => {
+  console.log('HIT', req.method, req.path);
+  next();
+});
+
+// ---- Health & ping ----
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.get('/api/ping', (_req, res) => res.json({ pong: true }));
+
 // ---- API routes ----
 app.use('/api/projects', projectsRouter);
 
-// ---- Health check ----
-app.get('/api/health', (_req, res) => res.json({ ok: true }));
+// ---- JSON 404 (must be AFTER routes) ----
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found', path: req.path });
+});
 
-// ---- Basic error handler (keeps unexpected errors from crashing the process) ----
+// ---- Error handler ----
 app.use((err, _req, res, _next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal server error' });
