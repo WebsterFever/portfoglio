@@ -1,4 +1,3 @@
-
 // server/src/routes/projects.js
 import express from 'express';
 import fs from 'fs';
@@ -17,86 +16,42 @@ const __dirname = path.dirname(__filename);
 const toAbsUploadPath = (maybeSlashPath) =>
   path.join(__dirname, '..', '..', maybeSlashPath.replace(/^\//, ''));
 
-/* -------------------------------------------------------
-   Router-level CORS + preflight (OPTIONS) handling
-   Ensures /api/projects* always returns CORS headers.
--------------------------------------------------------- */
+/* -------------------- CORS for this router (unchanged) -------------------- */
 const ALLOWED = (process.env.CLIENT_ORIGIN || '')
   .split(',')
-  .map((s) => s.trim())
+  .map(s => s.trim())
   .filter(Boolean);
 
 router.use((req, res, next) => {
   const origin = req.headers.origin;
-
-  // Allow server-to-server (no Origin) or any configured origin(s)
   if (!origin || ALLOWED.includes(origin)) {
-    // reflect the calling origin to satisfy the browser
     res.setHeader('Access-Control-Allow-Origin', origin || '*');
     res.setHeader('Vary', 'Origin');
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET,POST,PUT,PATCH,DELETE,OPTIONS'
-    );
-
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     const reqHeaders = req.headers['access-control-request-headers'];
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      reqHeaders || 'Content-Type,Authorization'
-    );
-
-    // keep false unless you actually use cookies
+    res.setHeader('Access-Control-Allow-Headers', reqHeaders || 'Content-Type,Authorization,x-portfolio-code');
     res.setHeader('Access-Control-Allow-Credentials', 'false');
   }
-
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
 
-/* -------------------- Helpers -------------------- */
+/* -------------------- NEW: admin guard -------------------- */
+const ADMIN_CODE = process.env.ADMIN_CODE;
 
-const parseTags = (value) => {
-  if (value === undefined) return null;
-  if (Array.isArray(value)) return value;
-  if (typeof value === 'string') {
-    try {
-      const j = JSON.parse(value);
-      if (Array.isArray(j)) return j;
-    } catch {
-      // comma list fallback
-      return value
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean);
-    }
+function ensureAdmin(req, res, next) {
+  if (!ADMIN_CODE) {
+    // Fail closed if the server isn't configured
+    return res.status(500).json({ message: 'Server admin code not configured' });
   }
-  return null;
-};
+  const code = req.headers['x-portfolio-code'] || req.body?.code;
+  if (code !== ADMIN_CODE) {
+    return res.status(401).json({ message: 'Invalid admin code' });
+  }
+  next();
+}
 
-const parseBool = (v, fallback = true) => {
-  if (v === undefined || v === null || v === '') return fallback;
-  if (typeof v === 'boolean') return v;
-  const s = String(v).toLowerCase().trim();
-  return ['1', 'true', 'yes', 'y', 'on'].includes(s)
-    ? true
-    : ['0', 'false', 'no', 'n', 'off'].includes(s)
-    ? false
-    : fallback;
-};
-
-// Accept YYYY-MM-DD or any date-ish string and trim to DATEONLY
-const parseDateOnly = (v) => {
-  if (!v) return null;
-  const s = String(v).trim();
-  // if already yyyy-mm-dd
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  const d = new Date(s);
-  if (Number.isNaN(d.getTime())) return null;
-  // format to yyyy-mm-dd
-  return d.toISOString().slice(0, 10);
-};
-
-/* -------------------- Routes -------------------- */
+/* -------------------- Read routes -------------------- */
 
 // GET /api/projects
 router.get('/', async (_req, res) => {
@@ -111,21 +66,42 @@ router.get('/:id', async (req, res) => {
   res.json(item);
 });
 
+/* -------------------- Write routes (protected) -------------------- */
+
 // POST /api/projects  (multipart form, field: image)
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
   try {
     const { title, link, description, tags, developedAt, inProduction } = req.body;
     if (!title || !link)
       return res.status(400).json({ message: 'title and link are required' });
 
+    // tags can be JSON string, comma string, or array
+    let parsedTags = null;
+    if (tags !== undefined) {
+      if (Array.isArray(tags)) parsedTags = tags;
+      else if (typeof tags === 'string') {
+        try {
+          const maybe = JSON.parse(tags);
+          if (Array.isArray(maybe)) parsedTags = maybe;
+        } catch {
+          parsedTags = tags.split(',').map(s => s.trim()).filter(Boolean);
+        }
+      }
+    }
+
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
     const created = await Project.create({
       title,
       link,
       description,
-      tags: parseTags(tags),
-      imagePath: req.file ? `/uploads/${req.file.filename}` : null,
-      developedAt: parseDateOnly(developedAt),           // NEW
-      inProduction: parseBool(inProduction, true),        // NEW
+      tags: parsedTags,
+      imagePath,
+      // Optional meta fields you added:
+      developed_at: developedAt || null,
+      in_production: typeof inProduction === 'string'
+        ? inProduction === 'true'
+        : !!inProduction
     });
 
     res.status(201).json(created);
@@ -135,20 +111,27 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// PUT /api/projects/:id  (multipart form, field: image)
-router.put('/:id', upload.single('image'), async (req, res) => {
+// PUT /api/projects/:id
+router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
   try {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
 
     const { title, link, description, tags, developedAt, inProduction } = req.body;
 
-    // tags
-    let nextTags = item.tags;
-    const parsed = parseTags(tags);
-    if (parsed !== null) nextTags = parsed;
+    let parsedTags = item.tags;
+    if (tags !== undefined) {
+      if (Array.isArray(tags)) parsedTags = tags;
+      else if (typeof tags === 'string') {
+        try {
+          const maybe = JSON.parse(tags);
+          parsedTags = Array.isArray(maybe) ? maybe : item.tags;
+        } catch {
+          parsedTags = tags.split(',').map(s => s.trim()).filter(Boolean);
+        }
+      }
+    }
 
-    // image
     let imagePath = item.imagePath;
     if (req.file) {
       if (imagePath) {
@@ -159,15 +142,15 @@ router.put('/:id', upload.single('image'), async (req, res) => {
     }
 
     await item.update({
-      title: title ?? item.title,
-      link: link ?? item.link,
-      description: description ?? item.description,
-      tags: nextTags,
+      title,
+      link,
+      description,
+      tags: parsedTags,
       imagePath,
-      developedAt:
-        developedAt !== undefined ? parseDateOnly(developedAt) : item.developedAt, // NEW
-      inProduction:
-        inProduction !== undefined ? parseBool(inProduction, item.inProduction) : item.inProduction, // NEW
+      developed_at: developedAt ?? item.developed_at,
+      in_production: typeof inProduction === 'undefined'
+        ? item.in_production
+        : (typeof inProduction === 'string' ? inProduction === 'true' : !!inProduction)
     });
 
     res.json(item);
@@ -178,7 +161,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 });
 
 // DELETE /api/projects/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAdmin, async (req, res) => {
   try {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
