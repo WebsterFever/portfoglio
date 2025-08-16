@@ -71,7 +71,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/projects  (multipart form, field: image)
 router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
   try {
-    const { title, link, description, tags, developedAt, inProduction } = req.body;
+    const { title, link, link2 , description, tags, developedAt, inProduction } = req.body;
     if (!title || !link)
       return res.status(400).json({ message: 'title and link are required' });
 
@@ -94,6 +94,7 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
     const created = await Project.create({
       title,
       link,
+      link2,
       description,
       tags: parsedTags,
       imagePath,
@@ -117,7 +118,7 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
 
-    const { title, link, description, tags, developedAt, inProduction } = req.body;
+    const { title, link,link2, description, tags, developedAt, inProduction } = req.body;
 
     let parsedTags = item.tags;
     if (tags !== undefined) {
@@ -144,6 +145,7 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
     await item.update({
       title,
       link,
+      link2,
       description,
       tags: parsedTags,
       imagePath,

@@ -19,13 +19,7 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3001;
 const CLIENT_ORIGIN_ENV = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
-/**
- * Allow one or multiple origins.
- * Example:
- *   CLIENT_ORIGIN=https://portfoglio-three.vercel.app
- * Or multiple, comma-separated:
- *   CLIENT_ORIGIN=https://portfoglio-three.vercel.app,http://localhost:5173
- */
+
 const ALLOWED_ORIGINS = CLIENT_ORIGIN_ENV
   .split(',')
   .map(s => s.trim())

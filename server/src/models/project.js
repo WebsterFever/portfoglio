@@ -12,6 +12,7 @@ export default (sequelize) => {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       title: { type: DataTypes.STRING(200), allowNull: false },
       link: { type: DataTypes.STRING(2048), allowNull: false },
+      link2: { type: DataTypes.STRING(2048), allowNull: false },
       imagePath: { type: DataTypes.STRING(512), allowNull: true }, // ex.: '/uploads/filename.jpg'
       description: { type: DataTypes.TEXT, allowNull: true },
       tags: {

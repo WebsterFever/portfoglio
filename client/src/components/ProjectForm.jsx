@@ -7,6 +7,7 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 export default function ProjectForm({ onCreated }) {
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
+    const [link2, setLink2] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState('');
   const [file, setFile] = useState(null);
@@ -21,6 +22,7 @@ export default function ProjectForm({ onCreated }) {
       const form = new FormData();
       form.append('title', title);
       form.append('link', link);
+       form.append('link2', link2);
       form.append('description', description);
       form.append('tags', tags);
       if (file) form.append('image', file);
@@ -47,6 +49,7 @@ export default function ProjectForm({ onCreated }) {
     <form className="form" onSubmit={submit}>
       <input type="text" placeholder="Project title *" value={title} onChange={e => setTitle(e.target.value)} />
       <input type="url" placeholder="Project link (https://...)*" value={link} onChange={e => setLink(e.target.value)} />
+       <input type="url" placeholder="Project linkOnline (https://...)*" value={link2} onChange={e => setLink(e.target.value)} />
       <textarea placeholder="Short description (optional)" value={description} onChange={e => setDescription(e.target.value)} />
       <input className="file" ref={fileRef} type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0])} />
       <input type="text" placeholder="Tags (comma-separated)" value={tags} onChange={e => setTags(e.target.value)} />
