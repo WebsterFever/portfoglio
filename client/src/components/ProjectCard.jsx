@@ -1,37 +1,3 @@
-
-// import React from 'react';
-// import axios from 'axios';
-
-// const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
-// export default function ProjectCard({ project, onDeleted }) {
-//   const del = async () => {
-//     if (!confirm('Delete this project?')) return;
-//     try {
-//       const code = window.prompt('Enter admin code to delete');
-//       if (!code) return;
-//       await axios.delete(`${API}/api/projects/` + project.id, { headers: { 'x-portfolio-code': code } });
-//       onDeleted(project.id);
-//     } catch (e) {
-//       alert(e?.response?.data?.message || 'Failed to delete');
-//     }
-//   };
-
-//   return (
-//     <div className="card">
-//       {project.imagePath && <img src={`${API}${project.imagePath}`} alt={project.title} />}
-//       <h3>{project.title}</h3>
-//       {project.description && <p>{project.description}</p>}
-//       {project.tags && project.tags.length > 0 && (
-//         <div className="badges">
-//           {project.tags.map((t, i) => <span key={i} className="badge">#{t}</span>)}
-//         </div>
-//       )}
-//       <a href={project.link} target="_blank" rel="noreferrer">Open Project</a>
-//       <a onClick={del} style={{ cursor: 'pointer' }}>Delete</a>
-//     </div>
-//   );
-// }
 import React from 'react';
 import axios from 'axios';
 
@@ -52,15 +18,17 @@ export default function ProjectCard({ project, onDeleted }) {
     }
   };
 
-  // New fields + backward-compat fallback
-  const live = project.liveUrl || null;
-  const code = project.codeUrl || project.link || null;
+  // Support both schemas (old/new)
+  let live = project.liveUrl || project.link2 || null;   // Project / Live URL
+  let code = project.codeUrl || project.link || null;    // Repo / Code URL
+
+  // If both are the same, show just one (as Project URL)
+  const norm = (u) => (u || '').trim().replace(/\/$/, '');
+  if (live && code && norm(live) === norm(code)) code = null;
 
   return (
     <div className="card">
-      {project.imagePath && (
-        <img src={`${API}${project.imagePath}`} alt={project.title} />
-      )}
+      {project.imagePath && <img src={`${API}${project.imagePath}`} alt={project.title} />}
 
       <h3>{project.title}</h3>
 
@@ -79,21 +47,20 @@ export default function ProjectCard({ project, onDeleted }) {
 
       {project.tags?.length > 0 && (
         <div className="badges">
-          {project.tags.map((t, i) => (
-            <span key={i} className="badge">#{t}</span>
-          ))}
+          {project.tags.map((t, i) => <span key={i} className="badge">#{t}</span>)}
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '6px' }}>
+      {/* Button row (mobile-first) */}
+      <div className="link-buttons">
         {live && (
-          <a href={live} target="_blank" rel="noreferrer">Live URL</a>
+          <a href={live} target="_blank" rel="noreferrer noopener">Project URL</a>
         )}
         {code && (
-          <a href={code} target="_blank" rel="noreferrer">Code URL</a>
+          <a href={code} target="_blank" rel="noreferrer noopener">Code URL</a>
         )}
         {!live && !code && project.link && (
-          <a href={project.link} target="_blank" rel="noreferrer">Open Project</a>
+          <a href={project.link} target="_blank" rel="noreferrer noopener">Open Project</a>
         )}
       </div>
 
