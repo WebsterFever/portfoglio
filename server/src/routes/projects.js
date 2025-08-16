@@ -36,7 +36,7 @@ router.use((req, res, next) => {
   next();
 });
 
-/* -------------------- NEW: admin guard -------------------- */
+/* -------------------- NEW: admin guard (unchanged) -------------------- */
 const ADMIN_CODE = process.env.ADMIN_CODE;
 
 function ensureAdmin(req, res, next) {
@@ -49,6 +49,13 @@ function ensureAdmin(req, res, next) {
     return res.status(401).json({ message: 'Invalid admin code' });
   }
   next();
+}
+
+/* -------------------- helpers -------------------- */
+function normalizeOptionalUrl(v) {
+  if (typeof v !== 'string') return null;
+  const trimmed = v.trim();
+  return trimmed ? trimmed : null;
 }
 
 /* -------------------- Read routes -------------------- */
@@ -71,7 +78,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/projects  (multipart form, field: image)
 router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
   try {
-    const { title, link, link2 , description, tags, developedAt, inProduction } = req.body;
+    const { title, link, link2, description, tags, developedAt, inProduction } = req.body;
     if (!title || !link)
       return res.status(400).json({ message: 'title and link are required' });
 
@@ -94,11 +101,11 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
     const created = await Project.create({
       title,
       link,
-      link2,
+      // link2 now optional: empty/omitted -> null
+      link2: normalizeOptionalUrl(link2),
       description,
       tags: parsedTags,
       imagePath,
-      // Optional meta fields you added:
       developed_at: developedAt || null,
       in_production: typeof inProduction === 'string'
         ? inProduction === 'true'
@@ -118,7 +125,7 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
 
-    const { title, link,link2, description, tags, developedAt, inProduction } = req.body;
+    const { title, link, link2, description, tags, developedAt, inProduction } = req.body;
 
     let parsedTags = item.tags;
     if (tags !== undefined) {
@@ -142,10 +149,10 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       imagePath = `/uploads/${req.file.filename}`;
     }
 
-    await item.update({
+    // Prepare update payload with minimal changes
+    const updatePayload = {
       title,
       link,
-      link2,
       description,
       tags: parsedTags,
       imagePath,
@@ -153,7 +160,14 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       in_production: typeof inProduction === 'undefined'
         ? item.in_production
         : (typeof inProduction === 'string' ? inProduction === 'true' : !!inProduction)
-    });
+    };
+
+    // Only update link2 if it was sent; empty string becomes null
+    if (Object.prototype.hasOwnProperty.call(req.body, 'link2')) {
+      updatePayload.link2 = normalizeOptionalUrl(link2);
+    }
+
+    await item.update(updatePayload);
 
     res.json(item);
   } catch (e) {

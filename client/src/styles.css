@@ -120,10 +120,11 @@ a { color: inherit; }
   border-radius: var(--radius);
   text-align: center;
   margin: var(--space-1);
-  transition: transform .15s ease-in-out;
+  transition: transform .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+.card a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 
-.card a:hover { transform: translateY(-2px); }
+/* ---------- Form ---------- */
 
 .form {
   background: rgba(17,24,39,.6);
@@ -138,6 +139,7 @@ a { color: inherit; }
 
 .form input[type="text"],
 .form input[type="url"],
+.form input[type="date"],
 .form textarea {
   width: 100%;
   padding: 12px var(--space-3);
@@ -146,11 +148,77 @@ a { color: inherit; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
 .form textarea { min-height: 90px; resize: vertical; }
 .form .file { grid-column: 1; }
 .form .actions { grid-column: 1; display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* prettier focus */
+.form input:focus,
+.form textarea:focus {
+  border-color: rgba(96,165,250,.7);
+  box-shadow: 0 0 0 3px rgba(96,165,250,.18);
+}
+
+/* date input tweaks (works in Chromium/WebKit) */
+.form input[type="date"] {
+  appearance: none;
+  position: relative;
+}
+.form input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(.8);
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+/* simple switch-style checkbox (no extra markup needed) */
+.form input[type="checkbox"] {
+  appearance: none;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #111827;
+  position: relative;
+  outline: none;
+  transition: background .2s ease, border-color .2s ease;
+}
+.form input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: left .2s ease, background .2s ease, box-shadow .2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.form input[type="checkbox"]:checked {
+  background: linear-gradient(90deg, rgba(96,165,250,.45), rgba(167,139,250,.45));
+  border-color: rgba(96,165,250,.7);
+}
+.form input[type="checkbox"]:checked::after {
+  left: 20px;
+  background: var(--text);
+}
+
+/* helpful inline layout for date + checkbox if you wrap them */
+.form .inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.form .switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  user-select: none;
+}
 
 .button {
   padding: 12px var(--space-3);
@@ -159,7 +227,9 @@ a { color: inherit; }
   background: linear-gradient(90deg, rgba(96,165,250,.15), rgba(167,139,250,.15));
   color: var(--text);
   cursor: pointer;
+  transition: transform .1s ease, box-shadow .2s ease;
 }
+.button:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 
 .badges { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) var(--space-1); }
 .badge {
@@ -197,6 +267,7 @@ a { color: inherit; }
   .form textarea,
   .form .file,
   .form .actions { grid-column: span 2; }
+  .form .inline { grid-column: span 2; }
 }
 
 /* >=768px (md) */
