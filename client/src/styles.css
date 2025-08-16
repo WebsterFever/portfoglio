@@ -298,3 +298,26 @@ a { color: inherit; }
     grid-template-columns: repeat(2, minmax(0, 1fr)); /* side-by-side */
   }
 }
+/* two buttons side-by-side inside cards, mobile-first */
+.card .btnrow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* 2 buttons beside each other */
+  gap: 8px;
+  margin: 6px;
+}
+
+/* reuse your .card a styling; add a class for clarity (optional) */
+.card .btn {
+  display: inline-block;
+  text-align: center;
+}
+
+/* if only one button exists, make it span both columns for symmetry */
+.card .btnrow .btn:only-child {
+  grid-column: span 2;
+}
+
+/* optional: on wider screens keep it the same; you can tweak if you want */
+@media (min-width: 640px) {
+  .card .btnrow { gap: 10px; }
+}

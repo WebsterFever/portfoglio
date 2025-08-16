@@ -18,17 +18,15 @@ export default function ProjectCard({ project, onDeleted }) {
     }
   };
 
-  // Support both schemas (old/new)
-  let live = project.liveUrl || project.link2 || null;   // Project / Live URL
-  let code = project.codeUrl || project.link || null;    // Repo / Code URL
-
-  // If both are the same, show just one (as Project URL)
-  const norm = (u) => (u || '').trim().replace(/\/$/, '');
-  if (live && code && norm(live) === norm(code)) code = null;
+  // Support both your old fields and the new ones
+  const live = project.liveUrl || project.link2 || null;     // live / online
+  const code = project.codeUrl || project.link || null;      // repo / project url
 
   return (
     <div className="card">
-      {project.imagePath && <img src={`${API}${project.imagePath}`} alt={project.title} />}
+      {project.imagePath && (
+        <img src={`${API}${project.imagePath}`} alt={project.title} />
+      )}
 
       <h3>{project.title}</h3>
 
@@ -47,20 +45,23 @@ export default function ProjectCard({ project, onDeleted }) {
 
       {project.tags?.length > 0 && (
         <div className="badges">
-          {project.tags.map((t, i) => <span key={i} className="badge">#{t}</span>)}
+          {project.tags.map((t, i) => (
+            <span key={i} className="badge">#{t}</span>
+          ))}
         </div>
       )}
 
-      {/* Button row (mobile-first) */}
-      <div className="link-buttons">
-        {live && (
-          <a href={live} target="_blank" rel="noreferrer noopener">Project URL</a>
-        )}
+      {/* Buttons row — always two columns on mobile */}
+      <div className="btnrow">
         {code && (
-          <a href={code} target="_blank" rel="noreferrer noopener">Code URL</a>
+          <a className="btn" href={code} target="_blank" rel="noreferrer">
+            Project URL
+          </a>
         )}
-        {!live && !code && project.link && (
-          <a href={project.link} target="_blank" rel="noreferrer noopener">Open Project</a>
+        {live && (
+          <a className="btn" href={live} target="_blank" rel="noreferrer">
+            Live URL
+          </a>
         )}
       </div>
 
