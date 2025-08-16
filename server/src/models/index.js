@@ -1,28 +1,42 @@
-import dotenv from 'dotenv';
-dotenv.config();
+// server/src/models/project.js
+import { DataTypes } from 'sequelize';
 
-import { Sequelize } from 'sequelize';
-import ProjectFactory from './project.js';
+export default (sequelize) => {
+  const dialect = sequelize.getDialect();
+  const TagsType =
+    dialect === 'postgres' ? DataTypes.ARRAY(DataTypes.STRING) : DataTypes.JSON;
 
-const isProd = !!process.env.DATABASE_URL;
+  const Project = sequelize.define(
+    'Project',
+    {
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 
-export const sequelize = isProd
-  ? new Sequelize(process.env.DATABASE_URL, {
-      dialect: 'postgres',
-      protocol: 'postgres',
-      logging: false,
-      dialectOptions: {
-        // Neon exige TLS
-        ssl: { require: true, rejectUnauthorized: false },
+      title: { type: DataTypes.STRING(200), allowNull: false },
+
+      // Map to existing DB columns
+      link:  { type: DataTypes.STRING(2048), allowNull: false, field: 'link'  }, // live url
+      link2: { type: DataTypes.STRING(2048), allowNull: true,  field: 'link2' }, // code url (optional)
+
+      imagePath: { type: DataTypes.STRING(512), allowNull: true, field: 'image_path' },
+
+      description: { type: DataTypes.TEXT, allowNull: true },
+
+      tags: {
+        type: TagsType,
+        allowNull: true,
+        defaultValue: dialect === 'postgres' ? null : [],
       },
-    })
-  : new Sequelize({
-      dialect: 'sqlite',
-      storage: './dev.sqlite', // arquivo local para desenvolvimento
-      logging: false,
-    });
 
-// init models
-export const Project = ProjectFactory(sequelize);
+      // If you’re storing these too:
+      developedAt:  { type: DataTypes.DATEONLY, allowNull: true,  field: 'developed_at' },
+      inProduction: { type: DataTypes.BOOLEAN,  allowNull: false, defaultValue: false, field: 'in_production' },
+    },
+    {
+      tableName: 'projects',
+      underscored: true,
+      timestamps: true,
+    }
+  );
 
-export default { sequelize, Project };
+  return Project;
+};
