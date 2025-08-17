@@ -358,6 +358,7 @@ a { color: inherit; }
 /* Call-to-action buttons row (mobile-first) */
 .cta-row {
   display: flex;
+  justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
   margin: 8px 6px 0;
