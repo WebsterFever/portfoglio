@@ -88,12 +88,7 @@ export default function ProjectForm({ onCreated }) {
         accept="image/*"
         onChange={e => setFile(e.target.files?.[0])}
       />
-      <input
-        type="text"
-        placeholder="Tags (comma-separated)"
-        value={tags}
-        onChange={e => setTags(e.target.value)}
-      />
+    
       <div className="actions">
         <button className="button" disabled={loading}>
           {loading ? 'Saving...' : 'Add Project'}
