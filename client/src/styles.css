@@ -321,3 +321,13 @@ a { color: inherit; }
 @media (min-width: 640px) {
   .card .btnrow { gap: 10px; }
 }
+/* put near your other rules */
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 6px;
+}
+@media (min-width: 480px) {
+  .btn-row { gap: 12px; }
+}
