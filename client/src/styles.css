@@ -414,3 +414,36 @@ a { color: inherit; }
   color: var(--text);
   opacity: .92;
 }
+/* Center the card title */
+.card .title {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: .2px;
+  margin: 10px 6px 6px;
+}
+
+/* Better reading flow for description */
+.card .desc {
+  margin: 6px 6px 10px;
+  line-height: 1.6;
+  text-align: justify;         /* format like your example */
+  text-justify: inter-word;
+  hyphens: auto;               /* nicer wrapping for long words */
+}
+
+/* Live URL label + pill styling */
+.live-label {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 2px 6px 6px;
+  letter-spacing: .3px;
+}
+
+/* Make the live URL look like a button, wrap long text cleanly */
+.live-pill {
+  display: block;              /* full-width pill */
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}

@@ -1,4 +1,3 @@
-// src/components/ProjectCard.jsx
 import React from 'react';
 import axios from 'axios';
 
@@ -19,15 +18,15 @@ export default function ProjectCard({ project, onDeleted }) {
     }
   };
 
-  // New fields + fallback for older data
-  const live = project.liveUrl || project.link2 || null;   // live site
-  const code = project.codeUrl || project.link || null;    // repo / main project link
+  // live site + repo/main link (backward-compatible)
+  const live = project.liveUrl || project.link2 || null;
+  const code = project.codeUrl || project.link || null;
 
-  // shorten display text but keep full href
-  const nice = (url) => (typeof url === 'string'
-    ? url.replace(/^https?:\/\//, '').replace(/\/$/, '')
-    : url
-  );
+  // shorter display text for long URLs (keeps full href)
+  const nice = (url) =>
+    typeof url === 'string'
+      ? url.replace(/^https?:\/\//, '').replace(/\/$/, '')
+      : url;
 
   return (
     <div className="card">
@@ -35,14 +34,15 @@ export default function ProjectCard({ project, onDeleted }) {
         <img src={`${API}${project.imagePath}`} alt={project.title} />
       )}
 
-      <h3>{project.title}</h3>
+      {/* centered title */}
+      <h3 className="title">{project.title}</h3>
 
-      {/* Clickable Live URL line under the title */}
+      {/* Live URL label + pill link (centered) */}
       {live && (
-        <div className="live-row">
-          <span className="live-label">Live URL</span>
+        <>
+          <div className="live-label">Live URL</div>
           <a
-            className="live-link"
+            className="cta live-pill"
             href={live}
             target="_blank"
             rel="noreferrer"
@@ -50,10 +50,11 @@ export default function ProjectCard({ project, onDeleted }) {
           >
             {nice(live)}
           </a>
-        </div>
+        </>
       )}
 
-      {project.description && <p>{project.description}</p>}
+      {/* nicely formatted description */}
+      {project.description && <p className="desc">{project.description}</p>}
 
       {project.tags?.length > 0 && (
         <div className="badges">
@@ -63,14 +64,13 @@ export default function ProjectCard({ project, onDeleted }) {
         </div>
       )}
 
-      {/* Buttons row — same style for both, side by side (mobile-first) */}
+      {/* CTA row */}
       <div className="cta-row">
         {code && (
           <a className="cta" href={code} target="_blank" rel="noreferrer">
             Project URL
           </a>
         )}
-        
       </div>
 
       <a onClick={del} style={{ cursor: 'pointer' }}>Delete</a>
