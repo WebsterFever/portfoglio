@@ -70,11 +70,7 @@ export default function ProjectCard({ project, onDeleted }) {
             Project URL
           </a>
         )}
-        {live && (
-          <a className="cta" href={live} target="_blank" rel="noreferrer">
-            Live URL
-          </a>
-        )}
+        
       </div>
 
       <a onClick={del} style={{ cursor: 'pointer' }}>Delete</a>
