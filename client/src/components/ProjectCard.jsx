@@ -1,3 +1,4 @@
+// src/components/ProjectCard.jsx
 import React from 'react';
 import axios from 'axios';
 
@@ -18,11 +19,15 @@ export default function ProjectCard({ project, onDeleted }) {
     }
   };
 
-  // Use your DB field names:
-  // - project.link      -> repo / project URL
-  // - project.link2     -> live URL (what you asked to click)
-  const codeUrl = project.link || project.codeUrl || null;
-  const liveUrl = project.link2 || project.liveUrl || null;
+  // New fields + fallback for older data
+  const live = project.liveUrl || project.link2 || null;   // live site
+  const code = project.codeUrl || project.link || null;    // repo / main project link
+
+  // shorten display text but keep full href
+  const nice = (url) => (typeof url === 'string'
+    ? url.replace(/^https?:\/\//, '').replace(/\/$/, '')
+    : url
+  );
 
   return (
     <div className="card">
@@ -32,7 +37,22 @@ export default function ProjectCard({ project, onDeleted }) {
 
       <h3>{project.title}</h3>
 
-      {/* remove any plain text URL under the title */}
+      {/* Clickable Live URL line under the title */}
+      {live && (
+        <div className="live-row">
+          <span className="live-label">Live URL</span>
+          <a
+            className="live-link"
+            href={live}
+            target="_blank"
+            rel="noreferrer"
+            title={live}
+          >
+            {nice(live)}
+          </a>
+        </div>
+      )}
+
       {project.description && <p>{project.description}</p>}
 
       {project.tags?.length > 0 && (
@@ -43,25 +63,15 @@ export default function ProjectCard({ project, onDeleted }) {
         </div>
       )}
 
-      {/* Buttons row (mobile-first, wraps nicely) */}
-      <div className="btn-row">
-        {codeUrl && (
-          <a
-            href={codeUrl}
-            target="_blank"
-            rel="noreferrer"
-            title="Project URL"
-          >
+      {/* Buttons row — same style for both, side by side (mobile-first) */}
+      <div className="cta-row">
+        {code && (
+          <a className="cta" href={code} target="_blank" rel="noreferrer">
             Project URL
           </a>
         )}
-        {liveUrl && (
-          <a
-            href={liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            title="Live URL"
-          >
+        {live && (
+          <a className="cta" href={live} target="_blank" rel="noreferrer">
             Live URL
           </a>
         )}

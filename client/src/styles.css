@@ -331,3 +331,57 @@ a { color: inherit; }
 @media (min-width: 480px) {
   .btn-row { gap: 12px; }
 }
+/* Under-title live link (clickable, tidy, wraps nicely) */
+.live-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 6px 10px;
+  line-height: 1.2;
+  flex-wrap: wrap;
+}
+.live-label {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .3px;
+}
+.live-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(96,165,250,.45);
+  word-break: break-word;
+}
+.live-link:hover {
+  border-color: rgba(96,165,250,.85);
+}
+
+/* Call-to-action buttons row (mobile-first) */
+.cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 8px 6px 0;
+}
+
+.cta {
+  display: inline-block;
+  padding: 10px 16px;
+  background: rgba(96,165,250,.08);
+  border: 1px solid rgba(96,165,250,.35);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  border-color: rgba(96,165,250,.65);
+}
+
+/* Optional: give the raw <a> inside cards less dominance than CTAs */
+.card > a:not(.cta):not(.live-link) {
+  background: rgba(96,165,250,.08);
+  border: 1px solid rgba(96,165,250,.35);
+}
