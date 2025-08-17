@@ -22,11 +22,34 @@ const SKILLS = {
   ],
   'DevOps / Cloud': [
     'Docker', 'Koyeb (deploy)', 'Vercel (frontend)',
-    'Environment variables (dotenv)', 'Linux basics'
+    'Environment variables (dotenv)', 'Linux'
   ],
   'Quality / Tooling': [
     'Git & GitHub', 'ESLint / Prettier', 'Postman/Insomnia',
     'Logging & error handling'
+  ],
+  'Data Science': [
+    // From your list (grouped/condensed for clean display)
+    'Python for Data Analysis',
+    'NumPy (arrays, broadcasting)',
+    'Pandas (ETL, joins, groupby, time series)',
+    'Matplotlib & Seaborn (visualization)',
+    'Statistics (descriptive & inferential)',
+    'APIs & data ingestion / cleaning',
+    'Feature engineering',
+    'scikit-learn (regression & classification)',
+    'Decision Trees / Random Forests',
+    'SVM (support vector machines)',
+    'kNN (nearest neighbors)',
+    'Dimensionality reduction (PCA)',
+    'Clustering (K-Means, etc.)',
+    'Model selection & cross-validation',
+    'TensorFlow / Keras (DL basics)',
+    'DL projects: MNIST / CIFAR / IMDB / AutoMPG',
+    'SQL for Data Science',
+    'Storytelling with data using SQL (sales dataset)',
+    'R (basics) & project work',
+    'End-to-end projects: IBM Attrition, Fraud, CO₂, Segmentation, iFood, House Prices'
   ]
 };
 
@@ -60,11 +83,16 @@ export default function App() {
 
       {/* About / Skills */}
       <section className="card about">
-        <h2>Webster — Full-Stack Developer</h2>
+        <h2>Webster — full-stack data scientist </h2>
         <p className="intro">
           I build full-stack web apps end-to-end: React on the frontend and
-          Node/Express on the backend with PostgreSQL/SQLite. Comfortable with Docker,
-          Koyeb/Vercel deployments, and Neon for managed Postgres.
+          Node/Express on the backend with PostgreSQL/SQLite. I also work across the
+          data-science stack — Python (NumPy, Pandas), visualization (Matplotlib/Seaborn),
+          statistics, and machine learning with scikit-learn (regression/classification,
+          decision trees, SVM, kNN, clustering, PCA). I use TensorFlow/Keras for
+          deep-learning (MNIST, CIFAR, IMDB, AutoMPG) and deliver end-to-end pipelines
+          with API ingestion and SQL storytelling. Comfortable with Docker, Koyeb/Vercel
+          deployments, and Neon for managed Postgres.
         </p>
 
         {Object.entries(SKILLS).map(([group, items]) => (
@@ -81,7 +109,7 @@ export default function App() {
 
       <ProjectForm onCreated={onCreated} />
 
-      <div className="grid">
+      <div className="grid" id="projects">
         {filtered.map((p) => (
           <ProjectCard key={p.id} project={p} onDeleted={onDeleted} />
         ))}

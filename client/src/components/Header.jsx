@@ -1,4 +1,3 @@
-
 import React from 'react';
 import profilePic from '../../assets/profile.jpg';
 
@@ -13,7 +12,8 @@ export default function Header({ query, setQuery }) {
         />
         <div className="brand">Webster</div>
       </div>
-      <div className="search">
+
+      <div className="search" style={{ gap: 10 }}>
         <input
           type="text"
           value={query}
@@ -21,6 +21,8 @@ export default function Header({ query, setQuery }) {
           placeholder="Search by title or tag..."
           aria-label="Search"
         />
+        {/* Anchor button to jump to the grid */}
+        <a href="#projects" className="button">View Projects</a>
       </div>
     </div>
   );
