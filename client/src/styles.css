@@ -386,3 +386,31 @@ a { color: inherit; }
   background: rgba(96,165,250,.08);
   border: 1px solid rgba(96,165,250,.35);
 }
+/* --- About / Skills (uses your theme tokens) --- */
+.about {
+  margin-top: var(--space-3);
+}
+
+.about h2 {
+  margin: var(--space-2) var(--space-1) var(--space-1);
+  font-size: 20px;
+}
+
+.about .intro {
+  margin: 0 var(--space-1) var(--space-3);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.skill-group {
+  margin-bottom: var(--space-2);
+}
+
+.skill-title {
+  margin: 4px var(--space-1) 8px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: .2px;
+  color: var(--text);
+  opacity: .92;
+}
