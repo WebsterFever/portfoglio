@@ -28,29 +28,7 @@ const SKILLS = {
     'Git & GitHub', 'ESLint / Prettier', 'Postman/Insomnia',
     'Logging & error handling'
   ],
-  'Data Science': [
-    // From your list (grouped/condensed for clean display)
-    'Python for Data Analysis',
-    'NumPy (arrays, broadcasting)',
-    'Pandas (ETL, joins, groupby, time series)',
-    'Matplotlib & Seaborn (visualization)',
-    'Statistics (descriptive & inferential)',
-    'APIs & data ingestion / cleaning',
-    'Feature engineering',
-    'scikit-learn (regression & classification)',
-    'Decision Trees / Random Forests',
-    'SVM (support vector machines)',
-    'kNN (nearest neighbors)',
-    'Dimensionality reduction (PCA)',
-    'Clustering (K-Means, etc.)',
-    'Model selection & cross-validation',
-    'TensorFlow / Keras (DL basics)',
-    'DL projects: MNIST / CIFAR / IMDB / AutoMPG',
-    'SQL for Data Science',
-    'Storytelling with data using SQL (sales dataset)',
-    'R (basics) & project work',
-    'End-to-end projects: IBM Attrition, Fraud, CO₂, Segmentation, iFood, House Prices'
-  ]
+
 };
 
 export default function App() {
