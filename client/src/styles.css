@@ -486,3 +486,22 @@ a { color: inherit; }
   opacity: .6;
   pointer-events: none;
 }
+html {
+  font-size: clamp(16px, 1.2vw + 14px, 20px);
+}
+
+.card p {
+  font-size: 16px;   /* was 14px */
+}
+
+.badge {
+  font-size: 14px;   /* was 12px */
+}
+
+.live-label {
+  font-size: 14px;   /* was 12px */
+}
+
+.skill-title {
+  font-size: 16px;   /* was 14px */
+}
