@@ -5,30 +5,73 @@ import ProjectForm from './components/ProjectForm.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
 const SKILLS = {
   Core: [
-    'JavaScript (ES202x)', 'TypeScript (comfortable)',
-    'HTML5', 'CSS3', 'Responsive UI', 'Accessibility (a11y)'
-  ],
-  Frontend: [
-    'React', 'Vite', 'Hooks/Context', 'React Router',
-    'TailwindCSS / custom CSS', 'Axios'
-  ],
-  Backend: [
-    'Node.js', 'Express', 'REST APIs', 'Sequelize ORM',
-    'PostgreSQL (Neon)', 'SQLite', 'Multer uploads',
-    'Auth (JWT / headers)', 'Validation & security basics'
-  ],
-  'DevOps / Cloud': [
-    'Docker', 'Koyeb (deploy)', 'Vercel (frontend)',
-    'Environment variables (dotenv)', 'Linux'
-  ],
-  'Quality / Tooling': [
-    'Git & GitHub', 'ESLint / Prettier', 'Postman/Insomnia',
-    'Logging & error handling'
+    'JavaScript (ES2023+)',
+    'TypeScript',
+    'HTML5',
+    'CSS3',
+    'Responsive Design',
+    'Accessibility (a11y)',
+    'Asynchronous Programming',
+    'REST API principles'
   ],
 
+  Frontend: [
+    'React',
+    'React Hooks & Context',
+    'React Router',
+    'Next.js',
+    'Vite',
+    'TailwindCSS',
+    'Custom CSS / CSS Architecture',
+    'Data Fetching (SSR / CSR)',
+    'Frontend Testing',
+    'Axios / Fetch API'
+  ],
+
+  Backend: [
+    'Node.js',
+    'Express',
+    'NestJS',
+    'REST APIs',
+    'Authentication (JWT)',
+    'Authorization & Role Handling',
+    'TypeORM',
+    'Sequelize ORM',
+    'PostgreSQL',
+    'MongoDB',
+    'SQLite',
+    'Mongoose',
+    'File Upload (Multer)',
+    'Validation & Security Best Practices',
+    'API Documentation (OpenAPI)'
+  ],
+
+  DevOps: [
+    'Docker',
+    'Vercel',
+    'Cloud Deployment (Koyeb)',
+    'Environment Configuration (.env)',
+    'Linux Basics'
+  ],
+
+  Architecture: [
+    'Backend Architecture',
+    'MVC Pattern',
+    'Middleware Design',
+    'Database Modeling',
+    'Modular Project Structure'
+  ],
+
+  Quality: [
+    'Git & GitHub',
+    'ESLint',
+    'Prettier',
+    'Postman / Insomnia',
+    'Unit & Integration Testing',
+    'Logging & Error Handling'
+  ]
 };
 
 export default function App() {
