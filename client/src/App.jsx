@@ -104,16 +104,21 @@ export default function App() {
 
       {/* About / Skills */}
       <section className="card about">
-        <h2>Webster — full-stack data scientist </h2>
+        <h2>Webster — Full-Stack Developer</h2>
         <p className="intro">
-          I build full-stack web apps end-to-end: React on the frontend and
-          Node/Express on the backend with PostgreSQL/SQLite. I also work across the
-          data-science stack — Python (NumPy, Pandas), visualization (Matplotlib/Seaborn),
-          statistics, and machine learning with scikit-learn (regression/classification,
-          decision trees, SVM, kNN, clustering, PCA). I use TensorFlow/Keras for
-          deep-learning (MNIST, CIFAR, IMDB, AutoMPG) and deliver end-to-end pipelines
-          with API ingestion and SQL storytelling. Comfortable with Docker, Koyeb/Vercel
-          deployments, and Neon for managed Postgres.
+          I design and build scalable full-stack web applications from concept to deployment.
+          On the frontend, I work with React and Next.js, building responsive,
+          accessible, and performant user interfaces. On the backend, I develop
+          RESTful APIs using Node.js, Express, and NestJS with PostgreSQL, MongoDB,
+          and TypeORM/Sequelize for data management.
+
+          I focus on clean architecture, authentication (JWT), API documentation,
+          and secure backend practices. I deploy production-ready applications
+          using Docker, Vercel, and cloud platforms, managing environment
+          configurations and optimized database workflows.
+
+          I enjoy building complete systems — from database modeling and API
+          design to polished UI and scalable deployments.
         </p>
 
         {Object.entries(SKILLS).map(([group, items]) => (
