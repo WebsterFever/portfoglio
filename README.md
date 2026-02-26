@@ -25,3 +25,17 @@ npm run dev
 ```
 
 **Usage:** when you click "Add Project" or Delete, you'll be prompted for the admin code.
+Full-Stack Portfolio
+
+React • Node.js • Sequelize • PostgreSQL
+Deployed on Vercel + Render + Supabase
+
+Includes admin code protection for create/update/delete.
+
+🌍 Production Deployment
+
+Frontend → Vercel
+
+Backend API → Render
+
+Database → Supabase (PostgreSQL)
