@@ -27,30 +27,18 @@ const ALLOWED_ORIGINS = CLIENT_ORIGIN_ENV
 
 // ---- Strict CORS / Preflight (no external deps) ----
 // This guarantees preflight OPTIONS always returns the proper headers.
+
+// TEMP CORS FIX — allow everything
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', '*');
 
-  // If request comes from an allowed browser origin, emit CORS headers
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin'); // avoid cache poisoning
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-
-    // Echo requested headers if provided, otherwise fallback to common ones
-    const reqHeaders = req.headers['access-control-request-headers'];
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      reqHeaders || 'Content-Type,Authorization'
-    );
-
-    // We are not using cookies; keep this "false" unless you use credentials on fetch()
-    res.setHeader('Access-Control-Allow-Credentials', 'false');
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
   }
 
-  // Short-circuit preflight and return 204 with the headers set above
-  if (req.method === 'OPTIONS') return res.status(204).end();
-
-  return next();
+  next();
 });
 
 // ---- Body parsing ----
