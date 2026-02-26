@@ -16,8 +16,14 @@
   --space-5: 24px;
 }
 
-* { box-sizing: border-box; }
-html, body, #root { height: 100%; }
+* { 
+  box-sizing: border-box; 
+}
+
+html, body, #root { 
+  height: 100%; 
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -28,7 +34,9 @@ body {
   color: var(--text);
 }
 
-a { color: inherit; }
+a { 
+  color: inherit; 
+}
 
 /* ---------- Layout (mobile first) ---------- */
 
@@ -122,7 +130,11 @@ a { color: inherit; }
   margin: var(--space-1);
   transition: transform .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-.card a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+
+.card a:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 16px rgba(0,0,0,.25); 
+}
 
 /* ---------- Form ---------- */
 
@@ -151,9 +163,21 @@ a { color: inherit; }
   transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
-.form textarea { min-height: 90px; resize: vertical; }
-.form .file { grid-column: 1; }
-.form .actions { grid-column: 1; display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.form textarea { 
+  min-height: 90px; 
+  resize: vertical; 
+}
+
+.form .file { 
+  grid-column: 1; 
+}
+
+.form .actions { 
+  grid-column: 1; 
+  display: flex; 
+  gap: var(--space-2); 
+  flex-wrap: wrap; 
+}
 
 /* prettier focus */
 .form input:focus,
@@ -167,6 +191,7 @@ a { color: inherit; }
   appearance: none;
   position: relative;
 }
+
 .form input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) opacity(.8);
   cursor: pointer;
@@ -185,6 +210,7 @@ a { color: inherit; }
   outline: none;
   transition: background .2s ease, border-color .2s ease;
 }
+
 .form input[type="checkbox"]::after {
   content: "";
   position: absolute;
@@ -197,10 +223,12 @@ a { color: inherit; }
   transition: left .2s ease, background .2s ease, box-shadow .2s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,.35);
 }
+
 .form input[type="checkbox"]:checked {
   background: linear-gradient(90deg, rgba(96,165,250,.45), rgba(167,139,250,.45));
   border-color: rgba(96,165,250,.7);
 }
+
 .form input[type="checkbox"]:checked::after {
   left: 20px;
   background: var(--text);
@@ -212,6 +240,7 @@ a { color: inherit; }
   align-items: center;
   gap: var(--space-2);
 }
+
 .form .switch-label {
   display: inline-flex;
   align-items: center;
@@ -229,9 +258,19 @@ a { color: inherit; }
   cursor: pointer;
   transition: transform .1s ease, box-shadow .2s ease;
 }
-.button:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 
-.badges { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-2) var(--space-1); }
+.button:hover { 
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 16px rgba(0,0,0,.25); 
+}
+
+.badges { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: var(--space-2); 
+  margin: var(--space-2) var(--space-1); 
+}
+
 .badge {
   font-size: 12px;
   color: var(--muted);
@@ -246,44 +285,81 @@ a { color: inherit; }
   outline-offset: 2px;
   border-radius: 6px;
 }
+
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+  * { 
+    animation: none !important; 
+    transition: none !important; 
+  }
 }
 
 /* ---------- Breakpoints (progressive enhancement) ---------- */
 
 /* >=480px */
 @media (min-width: 480px) {
-  .card img { height: 160px; }
-  .brand { font-size: 22px; }
+  .card img { 
+    height: 160px; 
+  }
+  .brand { 
+    font-size: 22px; 
+  }
 }
 
 /* >=640px (sm) */
 @media (min-width: 640px) {
-  .header { flex-direction: row; align-items: center; justify-content: space-between; }
-  .search { max-width: 420px; }
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .form { grid-template-columns: 1fr 1fr; }
+  .header { 
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: space-between; 
+  }
+  .search { 
+    max-width: 420px; 
+  }
+  .grid { 
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+  }
+  .form { 
+    grid-template-columns: 1fr 1fr; 
+  }
   .form textarea,
   .form .file,
-  .form .actions { grid-column: span 2; }
-  .form .inline { grid-column: span 2; }
+  .form .actions { 
+    grid-column: span 2; 
+  }
+  .form .inline { 
+    grid-column: span 2; 
+  }
 }
 
 /* >=768px (md) */
 @media (min-width: 768px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
-  .card img { height: 180px; }
+  .grid { 
+    grid-template-columns: repeat(3, minmax(0, 1fr)); 
+    gap: var(--space-4); 
+  }
+  .card img { 
+    height: 180px; 
+  }
 }
 
 /* >=1024px (lg) */
 @media (min-width: 1024px) {
-  .container { padding-left: var(--space-5); padding-right: var(--space-5); }
-  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .card img { height: 190px; }
+  .container { 
+    padding-left: var(--space-5); 
+    padding-right: var(--space-5); 
+  }
+  .grid { 
+    grid-template-columns: repeat(4, minmax(0, 1fr)); 
+  }
+  .card img { 
+    height: 190px; 
+  }
 }
+
 /* Make card links behave like full-width buttons */
-.card a { display: block; }
+.card a { 
+  display: block; 
+}
 
 /* Mobile-first: stack; at ≥480px place side-by-side */
 .link-buttons {
@@ -298,6 +374,7 @@ a { color: inherit; }
     grid-template-columns: repeat(2, minmax(0, 1fr)); /* side-by-side */
   }
 }
+
 /* two buttons side-by-side inside cards, mobile-first */
 .card .btnrow {
   display: grid;
@@ -319,8 +396,11 @@ a { color: inherit; }
 
 /* optional: on wider screens keep it the same; you can tweak if you want */
 @media (min-width: 640px) {
-  .card .btnrow { gap: 10px; }
+  .card .btnrow { 
+    gap: 10px; 
+  }
 }
+
 /* put near your other rules */
 .btn-row {
   display: flex;
@@ -328,9 +408,13 @@ a { color: inherit; }
   flex-wrap: wrap;
   margin: 6px;
 }
+
 @media (min-width: 480px) {
-  .btn-row { gap: 12px; }
+  .btn-row { 
+    gap: 12px; 
+  }
 }
+
 /* Under-title live link (clickable, tidy, wraps nicely) */
 .live-row {
   display: flex;
@@ -340,17 +424,20 @@ a { color: inherit; }
   line-height: 1.2;
   flex-wrap: wrap;
 }
+
 .live-label {
   color: var(--muted);
   font-size: 12px;
   letter-spacing: .3px;
 }
+
 .live-link {
   color: var(--accent);
   text-decoration: none;
   border-bottom: 1px dashed rgba(96,165,250,.45);
   word-break: break-word;
 }
+
 .live-link:hover {
   border-color: rgba(96,165,250,.85);
 }
@@ -375,6 +462,7 @@ a { color: inherit; }
   text-decoration: none;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
+
 .cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
@@ -386,6 +474,7 @@ a { color: inherit; }
   background: rgba(96,165,250,.08);
   border: 1px solid rgba(96,165,250,.35);
 }
+
 /* --- About / Skills (uses your theme tokens) --- */
 .about {
   margin-top: var(--space-3);
@@ -414,6 +503,7 @@ a { color: inherit; }
   color: var(--text);
   opacity: .92;
 }
+
 /* Center the card title */
 .card .title {
   text-align: center;
@@ -447,6 +537,7 @@ a { color: inherit; }
   word-break: break-word;
   overflow-wrap: anywhere;
 }
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -486,6 +577,7 @@ a { color: inherit; }
   opacity: .6;
   pointer-events: none;
 }
+
 html {
   font-size: clamp(16px, 1.2vw + 14px, 20px);
 }
