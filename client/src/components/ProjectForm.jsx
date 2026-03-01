@@ -33,7 +33,6 @@ export default function ProjectForm({ onCreated }) {
 
       const { data } = await axios.post(`${API}/api/projects`, form, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           'x-portfolio-code': code,
         },
       });
@@ -95,7 +94,7 @@ export default function ProjectForm({ onCreated }) {
         value={tags}
         onChange={e => setTags(e.target.value)}
       />
-    
+
       <div className="actions">
         <button className="button" disabled={loading}>
           {loading ? 'Saving...' : 'Add Project'}
