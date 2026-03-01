@@ -1,28 +1,21 @@
+// server/src/middleware/upload.js
+
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Ensure uploads dir exists: server/uploads
-const uploadsDir = path.join(__dirname, '..', '..', 'uploads');
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, uploadsDir),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const name = path
-      .basename(file.originalname, ext)
-      .replace(/\s+/g, '-')
-      .toLowerCase();
-    cb(null, `${Date.now()}-${name}${ext}`);
-  },
+// ----------------------
+// Cloudinary Configuration
+// ----------------------
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// MIME types we accept
+// ----------------------
+// Allowed Types
+// ----------------------
 const allowedMimes = new Set([
   'image/jpeg',
   'image/jpg',
@@ -34,32 +27,49 @@ const allowedMimes = new Set([
   'image/svg+xml',
 ]);
 
-// Extensions we accept (fallback if MIME is generic)
-const allowedExts = new Set([
-  '.jpeg',
-  '.jpg',
-  '.png',
-  '.webp',
-  '.gif',
-  '.heic',
-  '.heif',
-  '.svg',
-]);
-
 const fileFilter = (_req, file, cb) => {
   const mime = file.mimetype?.toLowerCase() || '';
-  const ext = path.extname(file.originalname).toLowerCase();
-  const isGeneric =
-    mime === 'application/octet-stream' || mime === 'binary/octet-stream';
 
-  if (allowedMimes.has(mime) || (isGeneric && allowedExts.has(ext))) {
+  if (allowedMimes.has(mime)) {
     return cb(null, true);
   }
+
   cb(new Error('Only image files are allowed'), false);
 };
 
+// ----------------------
+// Cloudinary Storage Engine
+// ----------------------
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (_req, file) => {
+    return {
+      folder: 'portfolio-projects',
+      allowed_formats: [
+        'jpg',
+        'jpeg',
+        'png',
+        'webp',
+        'gif',
+        'heic',
+        'heif',
+        'svg',
+      ],
+      public_id: `${Date.now()}-${file.originalname
+        .split('.')[0]
+        .replace(/\s+/g, '-')
+        .toLowerCase()}`,
+    };
+  },
+});
+
+// ----------------------
+// Export Upload Middleware
+// ----------------------
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB
+  },
 });

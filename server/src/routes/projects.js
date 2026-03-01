@@ -1,22 +1,11 @@
 // server/src/routes/projects.js
 import express from 'express';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
 import { Project } from '../models/index.js';
 import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Resolve '/uploads/xxx' to absolute path on disk
-const toAbsUploadPath = (maybeSlashPath) =>
-  path.join(__dirname, '..', '..', maybeSlashPath.replace(/^\//, ''));
-
-/* -------------------- CORS for this router (unchanged) -------------------- */
+/* -------------------- CORS -------------------- */
 const ALLOWED = (process.env.CLIENT_ORIGIN || '')
   .split(',')
   .map(s => s.trim())
@@ -29,40 +18,47 @@ router.use((req, res, next) => {
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     const reqHeaders = req.headers['access-control-request-headers'];
-    res.setHeader('Access-Control-Allow-Headers', reqHeaders || 'Content-Type,Authorization,x-portfolio-code');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      reqHeaders || 'Content-Type,Authorization,x-portfolio-code'
+    );
     res.setHeader('Access-Control-Allow-Credentials', 'false');
   }
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
 
-/* -------------------- NEW: admin guard (unchanged) -------------------- */
+/* -------------------- Admin Guard -------------------- */
 const ADMIN_CODE = process.env.ADMIN_CODE;
 
 function ensureAdmin(req, res, next) {
   if (!ADMIN_CODE) {
-    // Fail closed if the server isn't configured
     return res.status(500).json({ message: 'Server admin code not configured' });
   }
+
   const code = req.headers['x-portfolio-code'] || req.body?.code;
+
   if (code !== ADMIN_CODE) {
     return res.status(401).json({ message: 'Invalid admin code' });
   }
+
   next();
 }
 
-/* -------------------- helpers -------------------- */
+/* -------------------- Helpers -------------------- */
 function normalizeOptionalUrl(v) {
   if (typeof v !== 'string') return null;
   const trimmed = v.trim();
   return trimmed ? trimmed : null;
 }
 
-/* -------------------- Read routes -------------------- */
+/* -------------------- Read Routes -------------------- */
 
 // GET /api/projects
 router.get('/', async (_req, res) => {
-  const items = await Project.findAll({ order: [['createdAt', 'DESC']] });
+  const items = await Project.findAll({
+    order: [['createdAt', 'DESC']],
+  });
   res.json(items);
 });
 
@@ -73,20 +69,31 @@ router.get('/:id', async (req, res) => {
   res.json(item);
 });
 
-/* -------------------- Write routes (protected) -------------------- */
+/* -------------------- Write Routes (Protected) -------------------- */
 
-// POST /api/projects  (multipart form, field: image)
+// POST /api/projects
 router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
   try {
-    const { title, link, link2, description, tags, developedAt, inProduction } = req.body;
-    if (!title || !link)
-      return res.status(400).json({ message: 'title and link are required' });
+    const {
+      title,
+      link,
+      link2,
+      description,
+      tags,
+      developedAt,
+      inProduction
+    } = req.body;
 
-    // tags can be JSON string, comma string, or array
+    if (!title || !link) {
+      return res.status(400).json({ message: 'title and link are required' });
+    }
+
+    // Parse tags
     let parsedTags = null;
     if (tags !== undefined) {
-      if (Array.isArray(tags)) parsedTags = tags;
-      else if (typeof tags === 'string') {
+      if (Array.isArray(tags)) {
+        parsedTags = tags;
+      } else if (typeof tags === 'string') {
         try {
           const maybe = JSON.parse(tags);
           if (Array.isArray(maybe)) parsedTags = maybe;
@@ -96,20 +103,21 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
       }
     }
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    // ✅ Cloudinary URL
+    const imagePath = req.file ? req.file.path : null;
 
     const created = await Project.create({
       title,
       link,
-      // link2 now optional: empty/omitted -> null
       link2: normalizeOptionalUrl(link2),
       description,
       tags: parsedTags,
       imagePath,
       developed_at: developedAt || null,
-      in_production: typeof inProduction === 'string'
-        ? inProduction === 'true'
-        : !!inProduction
+      in_production:
+        typeof inProduction === 'string'
+          ? inProduction === 'true'
+          : !!inProduction,
     });
 
     res.status(201).json(created);
@@ -125,12 +133,22 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
 
-    const { title, link, link2, description, tags, developedAt, inProduction } = req.body;
+    const {
+      title,
+      link,
+      link2,
+      description,
+      tags,
+      developedAt,
+      inProduction
+    } = req.body;
 
     let parsedTags = item.tags;
+
     if (tags !== undefined) {
-      if (Array.isArray(tags)) parsedTags = tags;
-      else if (typeof tags === 'string') {
+      if (Array.isArray(tags)) {
+        parsedTags = tags;
+      } else if (typeof tags === 'string') {
         try {
           const maybe = JSON.parse(tags);
           parsedTags = Array.isArray(maybe) ? maybe : item.tags;
@@ -141,15 +159,12 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
     }
 
     let imagePath = item.imagePath;
+
+    // If new image uploaded → replace URL
     if (req.file) {
-      if (imagePath) {
-        const abs = toAbsUploadPath(imagePath);
-        fs.promises.unlink(abs).catch(() => {});
-      }
-      imagePath = `/uploads/${req.file.filename}`;
+      imagePath = req.file.path; // Cloudinary URL
     }
 
-    // Prepare update payload with minimal changes
     const updatePayload = {
       title,
       link,
@@ -157,12 +172,14 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       tags: parsedTags,
       imagePath,
       developed_at: developedAt ?? item.developed_at,
-      in_production: typeof inProduction === 'undefined'
-        ? item.in_production
-        : (typeof inProduction === 'string' ? inProduction === 'true' : !!inProduction)
+      in_production:
+        typeof inProduction === 'undefined'
+          ? item.in_production
+          : typeof inProduction === 'string'
+          ? inProduction === 'true'
+          : !!inProduction,
     };
 
-    // Only update link2 if it was sent; empty string becomes null
     if (Object.prototype.hasOwnProperty.call(req.body, 'link2')) {
       updatePayload.link2 = normalizeOptionalUrl(link2);
     }
@@ -182,12 +199,8 @@ router.delete('/:id', ensureAdmin, async (req, res) => {
     const item = await Project.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
 
-    if (item.imagePath) {
-      const abs = toAbsUploadPath(item.imagePath);
-      fs.promises.unlink(abs).catch(() => {});
-    }
-
     await item.destroy();
+
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
