@@ -10,7 +10,7 @@ export default function Header({ query, setQuery }) {
           alt="Profile"
           style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }}
         />
-        <div className="brand">Webster</div>
+        <div className="brand">Webster Fievre</div>
       </div>
       <a href="#projects" className="button">Projects</a>
 
