@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export default function ProjectCard({ project, onDeleted }) {
+  const [expanded, setExpanded] = useState(false);
+
   const del = async () => {
     if (!window.confirm('Delete this project?')) return;
 
@@ -21,48 +23,36 @@ export default function ProjectCard({ project, onDeleted }) {
     }
   };
 
-  // live site + repo/main link (backward-compatible)
   const live = project.liveUrl || project.link2 || null;
   const codeUrl = project.codeUrl || project.link || null;
 
-  // shorter display text for long URLs (keeps full href)
-  const nice = (url) =>
-    typeof url === 'string'
-      ? url.replace(/^https?:\/\//, '').replace(/\/$/, '')
-      : url;
-
   return (
     <div className="card">
-      {/* 🔥 IMPORTANT FIX: Use imagePath directly (Cloudinary gives full URL) */}
+
       {project.imagePath && (
         <img
           src={project.imagePath}
           alt={project.title}
-          style={{ width: '100%', height: '200px', objectFit: 'cover' }}
         />
       )}
 
       <h3 className="title">{project.title}</h3>
 
-      {/* Live URL */}
-      {live && (
-        <>
-          <div className="live-label">Live URL</div>
-          <a
-            className="cta live-pill"
-            href={live}
-            target="_blank"
-            rel="noreferrer"
-            title={live}
-          >
-            {nice(live)}
-          </a>
-        </>
-      )}
-
-      {/* Description */}
+      {/* Description (2 lines + See more) */}
       {project.description && (
-        <p className="desc">{project.description}</p>
+        <>
+          <p className={`desc ${expanded ? 'expanded' : ''}`}>
+            {project.description}
+          </p>
+          {project.description.length > 120 && (
+            <button
+              className="see-more"
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? 'See less' : 'See more'}
+            </button>
+          )}
+        </>
       )}
 
       {/* Tags */}
@@ -74,8 +64,19 @@ export default function ProjectCard({ project, onDeleted }) {
         </div>
       )}
 
-      {/* CTA row */}
+      {/* Buttons Row */}
       <div className="cta-row">
+        {live && (
+          <a
+            className="cta"
+            href={live}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Live Project
+          </a>
+        )}
+
         {codeUrl && (
           <a
             className="cta"
@@ -88,9 +89,9 @@ export default function ProjectCard({ project, onDeleted }) {
         )}
       </div>
 
-      <a onClick={del} style={{ cursor: 'pointer' }}>
+      <button className="delete-btn" onClick={del}>
         Delete
-      </a>
+      </button>
     </div>
   );
 }

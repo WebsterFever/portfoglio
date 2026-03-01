@@ -563,3 +563,56 @@ html {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Force uniform card layout */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 520px; /* adjust if needed */
+}
+
+/* Description clamp to 2 lines */
+.desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 6px 6px 6px;
+  line-height: 1.6;
+}
+
+.desc.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+/* See more button */
+.see-more {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+  margin: 0 6px 8px;
+  text-align: left;
+}
+
+.see-more:hover {
+  text-decoration: underline;
+}
+
+/* Delete button styled like others */
+.delete-btn {
+  margin-top: auto;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255, 99, 99, 0.1);
+  color: #ff6b6b;
+  cursor: pointer;
+  transition: transform .12s ease;
+}
+
+.delete-btn:hover {
+  transform: translateY(-1px);
+}
