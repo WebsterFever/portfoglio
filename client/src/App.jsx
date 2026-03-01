@@ -104,7 +104,7 @@ export default function App() {
 
       {/* About / Skills */}
       <section className="card about">
-        <h2>Webster — Full-Stack Developer</h2>
+        <h2>Webster Fievre— Full-Stack Developer</h2>
         <p className="intro">
           I design and build scalable full-stack web applications from concept to deployment.
           On the frontend, I work with React and Next.js, building responsive,
