@@ -3,8 +3,10 @@ import axios from 'axios';
 import Header from './components/Header.jsx';
 import ProjectForm from './components/ProjectForm.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
+import LoadingScreen from './components/LoadingScreen.jsx'; // ✅ IMPORT
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 const SKILLS = {
   Core: [
     'JavaScript (ES2023+)',
@@ -16,7 +18,6 @@ const SKILLS = {
     'Asynchronous Programming',
     'REST API principles'
   ],
-
   Frontend: [
     'React',
     'React Hooks & Context',
@@ -29,7 +30,6 @@ const SKILLS = {
     'Frontend Testing',
     'Axios / Fetch API'
   ],
-
   Backend: [
     'Node.js',
     'Express',
@@ -47,7 +47,6 @@ const SKILLS = {
     'Validation & Security Best Practices',
     'API Documentation (OpenAPI)'
   ],
-
   DevOps: [
     'Docker',
     'Vercel',
@@ -55,7 +54,6 @@ const SKILLS = {
     'Environment Configuration (.env)',
     'Linux Basics'
   ],
-
   Architecture: [
     'Backend Architecture',
     'MVC Pattern',
@@ -63,7 +61,6 @@ const SKILLS = {
     'Database Modeling',
     'Modular Project Structure'
   ],
-
   Quality: [
     'Git & GitHub',
     'ESLint',
@@ -77,13 +74,29 @@ const SKILLS = {
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(true);     // ✅ NEW
+  const [error, setError] = useState(null);         // ✅ NEW
 
-  const load = async () => {
-    const { data } = await axios.get(`${API}/api/projects`);
-    setProjects(data);
+  const load = async (retries = 5) => {
+    try {
+      const { data } = await axios.get(`${API}/api/projects`);
+      setProjects(data);
+      setLoading(false);
+    } catch (err) {
+      console.log("Server waking up... retrying");
+      
+      if (retries > 0) {
+        setTimeout(() => load(retries - 1), 2000);
+      } else {
+        setError("Server is taking too long to respond.");
+        setLoading(false);
+      }
+    }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -95,14 +108,33 @@ export default function App() {
     );
   }, [projects, query]);
 
-  const onCreated = (project) => setProjects((prev) => [project, ...prev]);
-  const onDeleted = (id) => setProjects((prev) => prev.filter((p) => p.id !== id));
+  const onCreated = (project) =>
+    setProjects((prev) => [project, ...prev]);
+
+  const onDeleted = (id) =>
+    setProjects((prev) => prev.filter((p) => p.id !== id));
+
+  // ✅ SHOW LOADING SCREEN
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  // ✅ OPTIONAL ERROR MESSAGE
+  if (error) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <h2>{error}</h2>
+        <button onClick={() => window.location.reload()}>
+          Refresh Page
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
       <Header query={query} setQuery={setQuery} />
 
-      {/* About / Skills */}
       <section className="card about">
         <h2>Webster Fievre — Full-Stack Developer</h2>
         <p className="intro">
@@ -137,7 +169,11 @@ export default function App() {
 
       <div className="grid" id="projects">
         {filtered.map((p) => (
-          <ProjectCard key={p.id} project={p} onDeleted={onDeleted} />
+          <ProjectCard
+            key={p.id}
+            project={p}
+            onDeleted={onDeleted}
+          />
         ))}
       </div>
     </div>
