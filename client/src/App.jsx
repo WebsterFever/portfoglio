@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+
 import Header from './components/Header.jsx';
 import ProjectForm from './components/ProjectForm.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
@@ -85,20 +86,28 @@ export default function App() {
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  // Load projects from backend
+  // If Railway is sleeping, retry a few times.
+  // If it still fails, show the portfolio without blocking the page.
   const load = async (retries = 5) => {
     try {
       const { data } = await axios.get(`${API}/api/projects`);
-      setProjects(data);
+
+      setProjects(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (err) {
       console.log('Server waking up... retrying');
 
       if (retries > 0) {
-        setTimeout(() => load(retries - 1), 2000);
+        setTimeout(() => {
+          load(retries - 1);
+        }, 2000);
       } else {
-        setError('Server is taking too long to respond.');
+        console.error('Backend unavailable:', err);
+
+        // IMPORTANT:
+        // Do not block the entire portfolio if backend is unavailable.
         setLoading(false);
       }
     }
@@ -108,94 +117,104 @@ export default function App() {
     load();
   }, []);
 
+  // Search/filter projects
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    if (!q) return projects;
+    if (!q) {
+      return projects;
+    }
 
-    return projects.filter(
-      (p) =>
-        p.title.toLowerCase().includes(q) ||
-        (p.tags || []).some((t) => t.toLowerCase().includes(q))
-    );
+    return projects.filter((project) => {
+      const title = project.title?.toLowerCase() || '';
+
+      const tags = Array.isArray(project.tags)
+        ? project.tags
+        : [];
+
+      return (
+        title.includes(q) ||
+        tags.some((tag) =>
+          String(tag).toLowerCase().includes(q)
+        )
+      );
+    });
   }, [projects, query]);
 
+  // Add new project to UI
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
   };
 
+  // Remove project from UI
   const onDeleted = (id) => {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
+    setProjects((prev) =>
+      prev.filter((project) => project.id !== id)
+    );
   };
 
+  // Show loading screen while first trying to reach Railway
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (error) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '100px' }}>
-        <h2>{error}</h2>
-
-        <button onClick={() => window.location.reload()}>
-          Refresh Page
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="container">
-      <Header query={query} setQuery={setQuery} />
+
+      <Header
+        query={query}
+        setQuery={setQuery}
+      />
 
       <section className="card about">
+
         <h2>
-          Webster Fievre — Full-Stack Developer & AI Engineering
+          Webster Fievre — Full-Stack Developer | AI Engineering
         </h2>
 
         <p className="intro">
-          I am a Full-Stack Developer expanding my software engineering
-          expertise into AI Engineering and enterprise backend development.
-          I build modern web applications using React, Next.js, TypeScript,
-          Node.js and NestJS, with a strong focus on scalable APIs,
-          authentication, databases and clean application architecture.
-          <br />
-          <br />
-          My AI Engineering work focuses on building intelligent applications
-          powered by large language models, including RAG systems, vector
-          search, AI agents, multi-agent orchestration, multimodal AI and
-          production-oriented AI workflows.
-          <br />
-          <br />
-          I am also expanding my backend engineering expertise with Java and
-          Spring Boot, as well as C# and .NET, strengthening my knowledge of
-          object-oriented programming, enterprise APIs, security, database
-          persistence, microservices and scalable backend architecture.
-          <br />
-          <br />
-          My goal is to combine full-stack software engineering, enterprise
-          backend development and artificial intelligence to build complete,
-          secure and intelligent applications from concept to production.
+          I build scalable full-stack applications with modern frontend,
+          backend, database, and cloud technologies. I’m expanding my
+          expertise in AI Engineering, Java/Spring Boot, and C#/.NET,
+          with a focus on intelligent, secure, and production-ready
+          software.
         </p>
 
         {Object.entries(SKILLS).map(([group, items]) => (
-          <div key={group} className="skill-group">
-            <h4 className="skill-title">{group}</h4>
+          <div
+            key={group}
+            className="skill-group"
+          >
+            <h4 className="skill-title">
+              {group}
+            </h4>
 
-            <div className="badges" style={{ marginTop: 0 }}>
-              {items.map((skill, index) => (
-                <span key={index} className="badge">
+            <div
+              className="badges"
+              style={{ marginTop: 0 }}
+            >
+              {items.map((skill) => (
+                <span
+                  key={`${group}-${skill}`}
+                  className="badge"
+                >
                   #{skill}
                 </span>
               ))}
             </div>
           </div>
         ))}
+
       </section>
 
-      <ProjectForm onCreated={onCreated} />
+      <ProjectForm
+        onCreated={onCreated}
+      />
 
-      <div className="grid" id="projects">
+      <div
+        className="grid"
+        id="projects"
+      >
         {filtered.map((project) => (
           <ProjectCard
             key={project.id}
@@ -204,6 +223,7 @@ export default function App() {
           />
         ))}
       </div>
+
     </div>
   );
 }
