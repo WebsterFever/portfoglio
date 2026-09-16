@@ -3,79 +3,89 @@ import axios from 'axios';
 import Header from './components/Header.jsx';
 import ProjectForm from './components/ProjectForm.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
-import LoadingScreen from './components/LoadingScreen.jsx'; // ✅ IMPORT
+import LoadingScreen from './components/LoadingScreen.jsx';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API = 'https://portfolio-production.up.railway.app';
 
 const SKILLS = {
-  Core: [
-    'JavaScript (ES2023+)',
+  'Full-Stack Development': [
+    'JavaScript',
     'TypeScript',
-    'HTML5',
-    'CSS3',
-    'Responsive Design',
-    'Accessibility (a11y)',
-    'Asynchronous Programming',
-    'REST API principles'
-  ],
-  Frontend: [
     'React',
-    'React Hooks & Context',
-    'React Router',
     'Next.js',
-    'Vite',
-    'TailwindCSS',
-    'Custom CSS / CSS Architecture',
-    'Data Fetching (SSR / CSR)',
-    'Frontend Testing',
-    'Axios / Fetch API'
-  ],
-  Backend: [
     'Node.js',
     'Express',
     'NestJS',
     'REST APIs',
-    'Authentication (JWT)',
-    'Authorization & Role Handling',
-    'TypeORM',
-    'Sequelize ORM',
     'PostgreSQL',
     'MongoDB',
-    'SQLite',
-    'Mongoose',
-    'File Upload (Multer)',
-    'Validation & Security Best Practices',
-    'API Documentation (OpenAPI)'
+    'Authentication & Authorization',
   ],
-  DevOps: [
+
+  'AI Engineering': [
+    'Generative AI',
+    'LLM Application Development',
+    'Prompt Engineering',
+    'Structured AI Outputs',
+    'RAG',
+    'Embeddings & Vector Search',
+    'AI Agents',
+    'Multi-Agent Systems',
+    'AI Orchestration',
+    'Multimodal AI',
+    'Model Context Protocol (MCP)',
+    'AI Observability',
+  ],
+
+  'Java Backend': [
+    'Java',
+    'Object-Oriented Programming',
+    'JPA / Hibernate',
+    'Spring Boot',
+    'Spring Data JPA',
+    'Spring Security',
+    'REST API Development',
+  ],
+
+  '.NET Backend': [
+    'C#',
+    '.NET',
+    'ASP.NET Core',
+    'Entity Framework',
+    'LINQ',
+    'Dependency Injection',
+    'REST API Development',
+    'Microservices',
+  ],
+
+  'Cloud & DevOps': [
     'Docker',
+    'Docker Compose',
     'Vercel',
-    'Cloud Deployment (Koyeb)',
-    'Environment Configuration (.env)',
-    'Linux Basics'
-  ],
-  Architecture: [
-    'Backend Architecture',
-    'MVC Pattern',
-    'Middleware Design',
-    'Database Modeling',
-    'Modular Project Structure'
-  ],
-  Quality: [
+    'Railway',
+    'Cloud Deployment',
+    'Environment Configuration',
     'Git & GitHub',
-    'ESLint',
-    'Prettier',
-    'Postman / Insomnia',
-    'Unit & Integration Testing',
-    'Logging & Error Handling'
-  ]
+  ],
+
+  'Software Engineering': [
+    'Object-Oriented Programming',
+    'Clean Architecture',
+    'SOLID Principles',
+    'Database Modeling',
+    'API Design',
+    'Authentication & Security',
+    'Testing',
+    'Error Handling',
+    'Scalable Application Architecture',
+  ],
 };
 
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(true);     // ✅ NEW
-  const [error, setError] = useState(null);         // ✅ NEW
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const load = async (retries = 5) => {
     try {
@@ -83,12 +93,12 @@ export default function App() {
       setProjects(data);
       setLoading(false);
     } catch (err) {
-      console.log("Server waking up... retrying");
-      
+      console.log('Server waking up... retrying');
+
       if (retries > 0) {
         setTimeout(() => load(retries - 1), 2000);
       } else {
-        setError("Server is taking too long to respond.");
+        setError('Server is taking too long to respond.');
         setLoading(false);
       }
     }
@@ -100,7 +110,9 @@ export default function App() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+
     if (!q) return projects;
+
     return projects.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
@@ -108,22 +120,23 @@ export default function App() {
     );
   }, [projects, query]);
 
-  const onCreated = (project) =>
+  const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
+  };
 
-  const onDeleted = (id) =>
+  const onDeleted = (id) => {
     setProjects((prev) => prev.filter((p) => p.id !== id));
+  };
 
-  // ✅ SHOW LOADING SCREEN
   if (loading) {
     return <LoadingScreen />;
   }
 
-  // ✅ OPTIONAL ERROR MESSAGE
   if (error) {
     return (
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
+      <div style={{ textAlign: 'center', marginTop: '100px' }}>
         <h2>{error}</h2>
+
         <button onClick={() => window.location.reload()}>
           Refresh Page
         </button>
@@ -136,29 +149,44 @@ export default function App() {
       <Header query={query} setQuery={setQuery} />
 
       <section className="card about">
-        <h2>Webster Fievre — Full-Stack Developer</h2>
+        <h2>
+          Webster Fievre — Full-Stack Developer & AI Engineering
+        </h2>
+
         <p className="intro">
-          I design and build scalable full-stack web applications from concept to deployment.
-          On the frontend, I work with React and Next.js, building responsive,
-          accessible, and performant user interfaces. On the backend, I develop
-          RESTful APIs using Node.js, Express, and NestJS with PostgreSQL, MongoDB,
-          and TypeORM/Sequelize for data management.
-
-          I focus on clean architecture, authentication (JWT), API documentation,
-          and secure backend practices. I deploy production-ready applications
-          using Docker, Vercel, and cloud platforms, managing environment
-          configurations and optimized database workflows.
-
-          I enjoy building complete systems — from database modeling and API
-          design to polished UI and scalable deployments.
+          I am a Full-Stack Developer expanding my software engineering
+          expertise into AI Engineering and enterprise backend development.
+          I build modern web applications using React, Next.js, TypeScript,
+          Node.js and NestJS, with a strong focus on scalable APIs,
+          authentication, databases and clean application architecture.
+          <br />
+          <br />
+          My AI Engineering work focuses on building intelligent applications
+          powered by large language models, including RAG systems, vector
+          search, AI agents, multi-agent orchestration, multimodal AI and
+          production-oriented AI workflows.
+          <br />
+          <br />
+          I am also expanding my backend engineering expertise with Java and
+          Spring Boot, as well as C# and .NET, strengthening my knowledge of
+          object-oriented programming, enterprise APIs, security, database
+          persistence, microservices and scalable backend architecture.
+          <br />
+          <br />
+          My goal is to combine full-stack software engineering, enterprise
+          backend development and artificial intelligence to build complete,
+          secure and intelligent applications from concept to production.
         </p>
 
         {Object.entries(SKILLS).map(([group, items]) => (
           <div key={group} className="skill-group">
             <h4 className="skill-title">{group}</h4>
+
             <div className="badges" style={{ marginTop: 0 }}>
-              {items.map((s, i) => (
-                <span key={i} className="badge">#{s}</span>
+              {items.map((skill, index) => (
+                <span key={index} className="badge">
+                  #{skill}
+                </span>
               ))}
             </div>
           </div>
@@ -168,10 +196,10 @@ export default function App() {
       <ProjectForm onCreated={onCreated} />
 
       <div className="grid" id="projects">
-        {filtered.map((p) => (
+        {filtered.map((project) => (
           <ProjectCard
-            key={p.id}
-            project={p}
+            key={project.id}
+            project={project}
             onDeleted={onDeleted}
           />
         ))}

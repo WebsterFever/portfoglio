@@ -86,7 +86,7 @@ export default function ProjectCard({ project, onDeleted }) {
         </>
       )}
 
-      {/* Buttons */}
+      {/* Buttons ,kkk*/}
       <div className="cta-row">
         {live && (
           <a className="cta" href={live} target="_blank" rel="noreferrer">
