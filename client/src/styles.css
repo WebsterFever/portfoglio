@@ -2331,3 +2331,128 @@ img {
   }
 
 }
+/* =========================================================
+   TYPOGRAPHY SIZE IMPROVEMENT
+========================================================= */
+
+/* Main navigation */
+.nav-sections a {
+  font-size: 13px;
+}
+
+.nav-action-link {
+  font-size: 12px;
+}
+
+.nav-download-button {
+  font-size: 11px;
+}
+
+/* Section titles */
+.section-heading > span {
+  font-size: 11px;
+}
+
+.section-heading h2 {
+  font-size: 22px;
+}
+
+/* Professional Summary */
+.professional-summary {
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+/* Skills */
+.resume-skill-group h3 {
+  font-size: 15px;
+}
+
+.resume-skill-group p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Experience */
+.timeline-content h3 {
+  font-size: 17px;
+}
+
+.timeline-content h4 {
+  font-size: 14px;
+}
+
+.timeline-content p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.period {
+  font-size: 13px;
+}
+
+/* Education */
+.info-label {
+  font-size: 10px;
+}
+
+.resume-info-card h3 {
+  font-size: 17px;
+}
+
+.resume-info-card h4 {
+  font-size: 14px;
+}
+
+.resume-info-card p {
+  font-size: 14px;
+}
+
+/* Training */
+.training-card h3 {
+  font-size: 15px;
+}
+
+.training-card p {
+  font-size: 13px;
+}
+
+/* Projects */
+.projects-intro {
+  font-size: 14px;
+}
+
+.project-type {
+  font-size: 10px;
+}
+
+.project-card h3 {
+  font-size: 18px;
+}
+
+.project-description {
+  font-size: 13px;
+}
+
+.technology-tag,
+.technology-more {
+  font-size: 10px;
+}
+
+.project-primary-link,
+.project-secondary-link {
+  font-size: 11px;
+}
+
+.add-project-button {
+  font-size: 13px;
+}
+
+/* Search */
+.project-toolbar input {
+  font-size: 14px;
+}
+
+.project-toolbar span {
+  font-size: 13px;
+}
