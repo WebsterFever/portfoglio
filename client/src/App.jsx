@@ -188,6 +188,15 @@ export default function App() {
       prev.filter((project) => project.id !== id)
     );
   };
+  const onUpdated = (updatedProject) => {
+    setProjects((prev) =>
+      prev.map((project) =>
+        project.id === updatedProject.id
+          ? updatedProject
+          : project
+      )
+    );
+  };
 
   if (loading) {
     return <LoadingScreen />;
@@ -452,6 +461,7 @@ export default function App() {
                 key={project.id}
                 project={project}
                 onDeleted={onDeleted}
+                onUpdated={onUpdated}
               />
             ))}
           </div>
