@@ -1979,13 +1979,49 @@ img {
 
 .project-admin-actions {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 14px;
+  justify-content: flex-start;
+  gap: 18px;
 
+  width: 100%;
   margin-top: 14px;
   padding-top: 12px;
 
   border-top: 1px solid var(--border);
+}
+
+
+.project-edit,
+.project-delete {
+  display: inline-flex;
+  align-items: center;
+
+  width: auto;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.project-edit {
+  color: var(--accent);
+}
+
+.project-delete {
+  color: var(--danger);
+}
+
+.project-edit:hover,
+.project-delete:hover {
+  text-decoration: underline;
 }
 
 .project-edit,
