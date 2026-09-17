@@ -1334,9 +1334,9 @@ img {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 
-  gap: 16px;
+  gap: 30px;
 
   margin-top: 15px;
   padding-top: 14px;
