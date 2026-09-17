@@ -1,30 +1,103 @@
 import React from 'react';
 import profilePic from '../../assets/profile.jpg';
 
-export default function Header({ query, setQuery }) {
+export default function Header() {
   return (
-    <div className="header">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img
-          src={profilePic}
-          alt="Profile"
-          style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }}
-        />
-        <div className="brand">Webster Fievre</div>
-      </div>
-      <a href="#projects" className="button">Projects</a>
+    <header
+      className="resume-header"
+      id="top"
+    >
+      <div className="resume-header-inner">
 
-      <div className="search" style={{ gap: 10 }}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by title or tag..."
-          aria-label="Search"
-        />
-     
+        <div className="profile-area">
+
+          <img
+            src={profilePic}
+            alt="Webster Fievre"
+            className="profile-photo"
+          />
+
+          <div className="profile-copy">
+
+            <p className="profile-eyebrow">
+              SOFTWARE DEVELOPER
+            </p>
+
+            <h1>Webster Fievre</h1>
+
+            <h2>
+              Full-Stack Developer
+              <span> | </span>
+              AI Engineering
+            </h2>
+
+            <p className="profile-location">
+              Toronto, Ontario, Canada
+            </p>
+
+          </div>
+        </div>
+
+        <div className="contact-area">
+
+          <a
+            href="mailto:your-email@example.com"
+            className="contact-link"
+          >
+            Email
+          </a>
+
+          <a
+            href="https://github.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="contact-link"
+          >
+            GitHub
+          </a>
+
+          <a
+            href="https://www.linkedin.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="contact-link"
+          >
+            LinkedIn
+          </a>
+
+        </div>
 
       </div>
-    </div>
+
+      <nav className="resume-nav">
+        <div className="resume-nav-inner">
+
+          <a href="#about">
+            Summary
+          </a>
+
+          <a href="#skills">
+            Skills
+          </a>
+
+          <a href="#experience">
+            Experience
+          </a>
+
+          <a href="#education">
+            Education
+          </a>
+
+          <a href="#training">
+            Training
+          </a>
+
+          <a href="#projects">
+            Projects
+          </a>
+
+        </div>
+      </nav>
+    </header>
   );
 }

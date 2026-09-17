@@ -6,46 +6,49 @@ import ProjectForm from './components/ProjectForm.jsx';
 import ProjectCard from './components/ProjectCard.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 
-const API = 'https://portfolio-production.up.railway.app';
+const API =
+  import.meta.env.VITE_API_URL ||
+  'https://portfolio-production.up.railway.app';
 
 const SKILLS = {
-  'Full-Stack Development': [
-    'JavaScript',
-    'TypeScript',
+  Frontend: [
     'React',
     'Next.js',
+    'TypeScript',
+    'JavaScript',
+    'HTML5',
+    'CSS3',
+    'Tailwind CSS',
+    'Responsive Design',
+  ],
+
+  Backend: [
     'Node.js',
-    'Express',
     'NestJS',
+    'Express',
     'REST APIs',
     'PostgreSQL',
     'MongoDB',
-    'Authentication & Authorization',
+    'JWT Authentication',
   ],
 
   'AI Engineering': [
     'Generative AI',
-    'LLM Application Development',
-    'Prompt Engineering',
-    'Structured AI Outputs',
+    'LLM Applications',
     'RAG',
-    'Embeddings & Vector Search',
+    'Vector Search',
     'AI Agents',
     'Multi-Agent Systems',
-    'AI Orchestration',
     'Multimodal AI',
-    'Model Context Protocol (MCP)',
-    'AI Observability',
+    'MCP',
   ],
 
   'Java Backend': [
     'Java',
-    'Object-Oriented Programming',
-    'JPA / Hibernate',
     'Spring Boot',
+    'JPA / Hibernate',
     'Spring Data JPA',
     'Spring Security',
-    'REST API Development',
   ],
 
   '.NET Backend': [
@@ -54,62 +57,92 @@ const SKILLS = {
     'ASP.NET Core',
     'Entity Framework',
     'LINQ',
-    'Dependency Injection',
-    'REST API Development',
-    'Microservices',
   ],
 
-  'Cloud & DevOps': [
+  'DevOps & Tools': [
     'Docker',
     'Docker Compose',
-    'Vercel',
     'Railway',
-    'Cloud Deployment',
-    'Environment Configuration',
-    'Git & GitHub',
-  ],
-
-  'Software Engineering': [
-    'Object-Oriented Programming',
-    'Clean Architecture',
-    'SOLID Principles',
-    'Database Modeling',
-    'API Design',
-    'Authentication & Security',
-    'Testing',
-    'Error Handling',
-    'Scalable Application Architecture',
+    'Vercel',
+    'Git',
+    'GitHub',
   ],
 };
+
+// ==========================================
+// PLACEHOLDER DATA
+// Replace later with your real information.
+// ==========================================
+
+const EXPERIENCE = [
+  {
+    role: 'Full-Stack Developer',
+    company: 'Personal & Academic Projects',
+    period: 'Present',
+    description:
+      'Designing and developing full-stack applications with modern frontend, backend, database, cloud and AI technologies.',
+  },
+  {
+    role: 'Technical Support Analyst',
+    company: 'Company Name — Placeholder',
+    period: '20XX — 20XX',
+    description:
+      'Provided technical support, investigated software and system issues, and assisted users with technology solutions.',
+  },
+];
+
+const EDUCATION = [
+  {
+    program: 'Computer Engineering',
+    school: 'Instituto Infnet',
+    period: 'In Progress',
+    description:
+      'Software engineering, programming, frontend development, mobile development and computer engineering studies.',
+  },
+];
+
+const TRAINING = [
+  {
+    title: 'AI Engineering',
+    description:
+      'Generative AI, LLM applications, RAG, vector search, agents, multimodal systems and AI application architecture.',
+  },
+  {
+    title: 'Full-Stack Development',
+    description:
+      'Modern frontend and backend application development, APIs, databases, authentication and deployment.',
+  },
+  {
+    title: 'Java & Spring Boot',
+    description:
+      'Java, object-oriented programming, JPA/Hibernate, Spring Boot, Spring Data and application security.',
+  },
+  {
+    title: 'C# & .NET',
+    description:
+      'C#, ASP.NET Core, Entity Framework, LINQ, APIs and enterprise backend development.',
+  },
+];
 
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [projectError, setProjectError] = useState(false);
+  const [showProjectForm, setShowProjectForm] = useState(false);
 
-  // Load projects from backend
-  // If Railway is sleeping, retry a few times.
-  // If it still fails, show the portfolio without blocking the page.
-  const load = async (retries = 5) => {
+  const load = async () => {
     try {
+      setProjectError(false);
+
       const { data } = await axios.get(`${API}/api/projects`);
 
       setProjects(Array.isArray(data) ? data : []);
-      setLoading(false);
     } catch (err) {
-      console.log('Server waking up... retrying');
-
-      if (retries > 0) {
-        setTimeout(() => {
-          load(retries - 1);
-        }, 2000);
-      } else {
-        console.error('Backend unavailable:', err);
-
-        // IMPORTANT:
-        // Do not block the entire portfolio if backend is unavailable.
-        setLoading(false);
-      }
+      console.error('Unable to load projects:', err);
+      setProjectError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,13 +150,10 @@ export default function App() {
     load();
   }, []);
 
-  // Search/filter projects
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    if (!q) {
-      return projects;
-    }
+    if (!q) return projects;
 
     return projects.filter((project) => {
       const title = project.title?.toLowerCase() || '';
@@ -141,88 +171,297 @@ export default function App() {
     });
   }, [projects, query]);
 
-  // Add new project to UI
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
+    setShowProjectForm(false);
   };
 
-  // Remove project from UI
   const onDeleted = (id) => {
     setProjects((prev) =>
       prev.filter((project) => project.id !== id)
     );
   };
 
-  // Show loading screen while first trying to reach Railway
   if (loading) {
     return <LoadingScreen />;
   }
 
   return (
-    <div className="container">
+    <div className="resume-page">
 
-      <Header
-        query={query}
-        setQuery={setQuery}
-      />
+      <Header />
 
-      <section className="card about">
+      <main className="resume-container">
 
-        <h2>
-          Webster Fievre — Full-Stack Developer | AI Engineering
-        </h2>
+        {/* PROFESSIONAL SUMMARY */}
 
-        <p className="intro">
-          I build scalable full-stack applications with modern frontend,
-          backend, database, and cloud technologies. I’m expanding my
-          expertise in AI Engineering, Java/Spring Boot, and C#/.NET,
-          with a focus on intelligent, secure, and production-ready
-          software.
+        <section
+          className="resume-section summary-section"
+          id="about"
+        >
+          <div className="section-heading">
+            <span>01</span>
+            <h2>Professional Summary</h2>
+          </div>
+
+          <p className="professional-summary">
+            Full-Stack Developer building scalable web applications
+            with modern frontend, backend, database and cloud
+            technologies. Expanding my expertise in AI Engineering,
+            Java/Spring Boot and C#/.NET, with a focus on intelligent,
+            secure and production-ready software.
+          </p>
+        </section>
+
+        {/* TECHNICAL SKILLS */}
+
+        <section
+          className="resume-section"
+          id="skills"
+        >
+          <div className="section-heading">
+            <span>02</span>
+            <h2>Technical Skills</h2>
+          </div>
+
+          <div className="skills-resume-grid">
+            {Object.entries(SKILLS).map(([group, items]) => (
+              <div
+                className="resume-skill-group"
+                key={group}
+              >
+                <h3>{group}</h3>
+
+                <p>
+                  {items.join(' • ')}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* EXPERIENCE */}
+
+        <section
+          className="resume-section"
+          id="experience"
+        >
+          <div className="section-heading">
+            <span>03</span>
+            <h2>Experience</h2>
+          </div>
+
+          <div className="timeline">
+            {EXPERIENCE.map((item, index) => (
+              <article
+                className="timeline-item"
+                key={`${item.role}-${index}`}
+              >
+                <div className="timeline-dot" />
+
+                <div className="timeline-content">
+                  <div className="timeline-top">
+                    <div>
+                      <h3>{item.role}</h3>
+                      <h4>{item.company}</h4>
+                    </div>
+
+                    <span className="period">
+                      {item.period}
+                    </span>
+                  </div>
+
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* EDUCATION */}
+
+        <section
+          className="resume-section"
+          id="education"
+        >
+          <div className="section-heading">
+            <span>04</span>
+            <h2>Education</h2>
+          </div>
+
+          <div className="education-grid">
+            {EDUCATION.map((item, index) => (
+              <article
+                className="resume-info-card"
+                key={`${item.school}-${index}`}
+              >
+                <span className="info-label">
+                  {item.period}
+                </span>
+
+                <h3>{item.program}</h3>
+                <h4>{item.school}</h4>
+
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* TRAINING */}
+
+        <section
+          className="resume-section"
+          id="training"
+        >
+          <div className="section-heading">
+            <span>05</span>
+            <h2>
+              Certifications & Continuing Education
+            </h2>
+          </div>
+
+          <div className="training-grid">
+            {TRAINING.map((item, index) => (
+              <article
+                className="training-card"
+                key={`${item.title}-${index}`}
+              >
+                <div className="training-number">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* PROJECTS - FINAL SECTION */}
+
+        <section
+          className="resume-section projects-section"
+          id="projects"
+        >
+          <div className="projects-heading-row">
+
+            <div className="section-heading">
+              <span>06</span>
+              <h2>Projects</h2>
+            </div>
+
+            <button
+              className="add-project-button"
+              type="button"
+              onClick={() =>
+                setShowProjectForm((prev) => !prev)
+              }
+            >
+              {showProjectForm
+                ? 'Close'
+                : '+ Add Project'}
+            </button>
+
+          </div>
+
+          <p className="projects-intro">
+            Selected applications and software projects I have
+            designed and developed.
+          </p>
+
+          {showProjectForm && (
+            <div className="project-form-wrapper">
+              <div className="form-heading">
+                <h3>Add New Project</h3>
+                <p>
+                  Add a project to your portfolio.
+                </p>
+              </div>
+
+              <ProjectForm
+                onCreated={onCreated}
+              />
+            </div>
+          )}
+
+          <div className="project-toolbar">
+
+            <input
+              type="text"
+              value={query}
+              onChange={(e) =>
+                setQuery(e.target.value)
+              }
+              placeholder="Search projects by title or technology..."
+              aria-label="Search projects"
+            />
+
+            <span>
+              {filtered.length}{' '}
+              {filtered.length === 1
+                ? 'project'
+                : 'projects'}
+            </span>
+
+          </div>
+
+          {projectError && (
+            <div className="projects-error">
+              <div>
+                <strong>
+                  Projects could not be loaded.
+                </strong>
+
+                <p>
+                  The rest of the portfolio is still
+                  available.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setLoading(true);
+                  load();
+                }}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {!projectError && filtered.length === 0 && (
+            <div className="empty-projects">
+              No projects match your search.
+            </div>
+          )}
+
+          <div className="projects-grid">
+            {filtered.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onDeleted={onDeleted}
+              />
+            ))}
+          </div>
+
+        </section>
+
+      </main>
+
+      <footer className="resume-footer">
+        <p>
+          © {new Date().getFullYear()} Webster Fievre
         </p>
 
-        {Object.entries(SKILLS).map(([group, items]) => (
-          <div
-            key={group}
-            className="skill-group"
-          >
-            <h4 className="skill-title">
-              {group}
-            </h4>
-
-            <div
-              className="badges"
-              style={{ marginTop: 0 }}
-            >
-              {items.map((skill) => (
-                <span
-                  key={`${group}-${skill}`}
-                  className="badge"
-                >
-                  #{skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-
-      </section>
-
-      <ProjectForm
-        onCreated={onCreated}
-      />
-
-      <div
-        className="grid"
-        id="projects"
-      >
-        {filtered.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            onDeleted={onDeleted}
-          />
-        ))}
-      </div>
+        <a href="#top">
+          Back to top ↑
+        </a>
+      </footer>
 
     </div>
   );
