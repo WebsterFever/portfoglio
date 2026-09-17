@@ -1,23 +1,21 @@
-:root {
-  --bg: #f4f6f8;
-  --surface: #ffffff;
-  --surface-soft: #f8fafc;
+:root[data-theme="dark"] {
+  --bg: #0b1120;
+  --surface: #111827;
+  --surface-soft: #172033;
 
-  --text: #172033;
-  --muted: #667085;
-  --light-text: #98a2b3;
+  --text: #f8fafc;
+  --muted: #a7b0c0;
+  --light-text: #8b95a7;
 
-  --primary: #173b67;
-  --primary-hover: #102d50;
-  --accent: #2563eb;
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+  --accent: #60a5fa;
 
-  --border: #e4e7ec;
-  --border-strong: #d0d5dd;
+  --border: #263244;
+  --border-strong: #37465c;
 
   --shadow:
-    0 12px 35px rgba(16, 24, 40, 0.07);
-
-  --radius: 14px;
+    0 12px 35px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -1199,7 +1197,141 @@ a {
   }
 
 }
+/* =========================================
+   DARK / LIGHT MODE
+========================================= */
 
+body,
+.resume-header,
+.resume-container,
+.resume-nav,
+.resume-section,
+.project-card,
+.resume-info-card,
+.training-card,
+.project-form-wrapper,
+.contact-link,
+.project-toolbar input,
+.form-field input,
+.form-field textarea {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+[data-theme="dark"] .project-toolbar input,
+[data-theme="dark"] .form-field input,
+[data-theme="dark"] .form-field textarea {
+  background: #111827;
+  color: var(--text);
+}
+
+[data-theme="dark"] .resume-info-card,
+[data-theme="dark"] .project-form-wrapper {
+  background: var(--surface-soft);
+}
+
+[data-theme="dark"] .training-number {
+  background: rgba(96, 165, 250, 0.12);
+}
+
+[data-theme="dark"] .technology-tag,
+[data-theme="dark"] .technology-more {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-button {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease;
+}
+
+.theme-button:hover {
+  transform: translateY(-2px);
+}
+
+.resume-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 42px;
+  padding: 0 15px;
+
+  border-radius: 9px;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+}
+
+.resume-download:hover {
+  opacity: 0.9;
+}
+
+/* Dark mode button/link correction */
+[data-theme="dark"] .resume-download {
+  background: #3b82f6;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 680px) {
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-tools {
+    width: 100%;
+  }
+
+  .resume-download {
+    flex: 1;
+  }
+}
 /* =========================================
    SMALL PHONES
 ========================================= */
