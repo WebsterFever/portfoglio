@@ -1377,3 +1377,104 @@ body,
   }
 
 }
+/* =========================================
+   RESUME PDF / PRINT
+========================================= */
+
+@media print {
+
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  body {
+    background: white !important;
+    color: #111827 !important;
+  }
+
+  .resume-page {
+    background: white !important;
+  }
+
+  .resume-header {
+    border-bottom: 1px solid #d1d5db;
+    background: white !important;
+  }
+
+  .resume-header-inner {
+    width: 100%;
+    padding: 0 0 20px;
+  }
+
+  .profile-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-copy h1 {
+    color: #111827 !important;
+    font-size: 30px;
+  }
+
+  .profile-copy h2,
+  .profile-location,
+  .professional-summary,
+  .resume-skill-group p,
+  .timeline-content p,
+  .resume-info-card p,
+  .training-card p {
+    color: #475467 !important;
+  }
+
+  .section-heading h2,
+  .timeline-content h4,
+  .resume-info-card h4 {
+    color: #173b67 !important;
+  }
+
+  .resume-container {
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    background: white !important;
+  }
+
+  .resume-section {
+    padding: 25px 0;
+    border-bottom: 1px solid #e5e7eb;
+    break-inside: avoid;
+  }
+
+  /* Hide website-only controls */
+  .resume-nav,
+  .header-tools,
+  .contact-area,
+  .projects-section,
+  .resume-footer,
+  .add-project-button,
+  .project-toolbar,
+  .project-form-wrapper,
+  .project-delete,
+  .theme-button,
+  .resume-download {
+    display: none !important;
+  }
+
+  .skills-resume-grid,
+  .education-grid,
+  .training-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resume-info-card,
+  .training-card {
+    background: white !important;
+    box-shadow: none;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

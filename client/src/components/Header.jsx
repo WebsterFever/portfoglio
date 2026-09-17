@@ -92,13 +92,13 @@ export default function Header() {
               {theme === 'light' ? '🌙' : '☀️'}
             </button>
 
-            <a
-              href="/Webster-Fievre-Resume.pdf"
-              download="Webster-Fievre-Resume.pdf"
+            <button
+              type="button"
               className="resume-download"
+              onClick={() => window.print()}
             >
               ↓ Download Résumé
-            </a>
+            </button>
 
           </div>
         </div>
