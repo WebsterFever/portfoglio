@@ -101,7 +101,7 @@ const EDUCATION = [
   },
   {
     program: 'Full-Stack Development & AI Engineering',
-    school: 'Henry',
+    school: 'Soy Henry',
     period: 'Professional Training',
     description:
       'Full-stack web development and AI engineering, including React, TypeScript, Node.js, APIs, databases, Generative AI, LLM applications, RAG, AI agents and modern AI-powered applications.',
