@@ -3244,3 +3244,25 @@ img {
 .project-toolbar span {
   font-size: 13px;
 }
+.profile-contact-info {
+  margin-top: 8px;
+}
+
+.profile-location {
+  margin: 0;
+}
+
+.profile-website {
+  display: inline-block;
+  margin-top: 5px;
+
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.profile-website:hover {
+  text-decoration: underline;
+}

@@ -49,9 +49,20 @@ export default function Header() {
               AI Engineering
             </h2>
 
-            <p className="profile-location">
-              Toronto, Ontario, Canada
-            </p>
+            <div className="profile-contact-info">
+              <p className="profile-location">
+                Toronto, Ontario, Canada
+              </p>
+
+              <a
+                href="https://www.websterfievre.com"
+                target="_blank"
+                rel="noreferrer"
+                className="profile-website"
+              >
+                websterfievre.com
+              </a>
+            </div>
           </div>
 
         </div>
