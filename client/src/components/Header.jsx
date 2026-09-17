@@ -6,6 +6,8 @@ export default function Header() {
     return localStorage.getItem('portfolio-theme') || 'light';
   });
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('portfolio-theme', theme);
@@ -17,11 +19,17 @@ export default function Header() {
     );
   };
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <header className="resume-header" id="top">
-      <div className="resume-header-inner">
 
+      {/* TOP PROFILE */}
+      <div className="resume-header-inner">
         <div className="profile-area">
+
           <img
             src={profilePic}
             alt="Webster Fievre"
@@ -45,76 +53,121 @@ export default function Header() {
               Toronto, Ontario, Canada
             </p>
           </div>
+
         </div>
-
-        <div className="header-actions">
-
-          <div className="contact-area">
-            <a
-              href="mailto:your-email@example.com"
-              className="contact-link"
-            >
-              Email
-            </a>
-
-            <a
-              href="https://github.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="contact-link"
-            >
-              GitHub
-            </a>
-
-            <a
-              href="https://www.linkedin.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="contact-link"
-            >
-              LinkedIn
-            </a>
-          </div>
-
-          <div className="header-tools">
-
-            <button
-              type="button"
-              className="theme-button"
-              onClick={toggleTheme}
-              aria-label="Toggle dark and light mode"
-              title={
-                theme === 'light'
-                  ? 'Switch to dark mode'
-                  : 'Switch to light mode'
-              }
-            >
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-
-            <button
-              type="button"
-              className="resume-download"
-              onClick={() => window.print()}
-            >
-              ↓ Download Résumé
-            </button>
-
-          </div>
-        </div>
-
       </div>
 
+      {/* NAVIGATION */}
       <nav className="resume-nav">
         <div className="resume-nav-inner">
-          <a href="#about">Summary</a>
-          <a href="#skills">Skills</a>
-          <a href="#experience">Experience</a>
-          <a href="#education">Education</a>
-          <a href="#training">Training</a>
-          <a href="#projects">Projects</a>
+
+          {/* MOBILE HAMBURGER */}
+          <button
+            type="button"
+            className="mobile-menu-button"
+            onClick={() => setMenuOpen((current) => !current)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            <span>☰</span>
+            <span>Menu</span>
+          </button>
+
+          <div
+            className={`nav-content ${
+              menuOpen ? 'nav-open' : ''
+            }`}
+          >
+
+            {/* LEFT SIDE */}
+            <div className="nav-sections">
+              <a href="#about" onClick={closeMenu}>
+                Summary
+              </a>
+
+              <a href="#skills" onClick={closeMenu}>
+                Skills
+              </a>
+
+              <a href="#experience" onClick={closeMenu}>
+                Experience
+              </a>
+
+              <a href="#education" onClick={closeMenu}>
+                Education
+              </a>
+
+              <a href="#training" onClick={closeMenu}>
+                Training
+              </a>
+
+              <a href="#projects" onClick={closeMenu}>
+                Projects
+              </a>
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="nav-actions">
+
+              <a
+                href="mailto:your-email@example.com"
+                className="nav-action-link"
+                onClick={closeMenu}
+              >
+                Email
+              </a>
+
+              <a
+                href="https://github.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="nav-action-link"
+                onClick={closeMenu}
+              >
+                GitHub
+              </a>
+
+              <a
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="nav-action-link"
+                onClick={closeMenu}
+              >
+                LinkedIn
+              </a>
+
+              <button
+                type="button"
+                className="nav-theme-button"
+                onClick={toggleTheme}
+                aria-label="Toggle dark and light mode"
+                title={
+                  theme === 'light'
+                    ? 'Switch to dark mode'
+                    : 'Switch to light mode'
+                }
+              >
+                {theme === 'light' ? '🌙' : '☀️'}
+              </button>
+
+              <button
+                type="button"
+                className="nav-download-button"
+                onClick={() => {
+                  closeMenu();
+                  window.print();
+                }}
+              >
+                ↓ Download Résumé
+              </button>
+
+            </div>
+
+          </div>
         </div>
       </nav>
+
     </header>
   );
 }
