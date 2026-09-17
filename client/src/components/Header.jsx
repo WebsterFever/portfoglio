@@ -74,9 +74,8 @@ export default function Header() {
           </button>
 
           <div
-            className={`nav-content ${
-              menuOpen ? 'nav-open' : ''
-            }`}
+            className={`nav-content ${menuOpen ? 'nav-open' : ''
+              }`}
           >
 
             {/* LEFT SIDE */}
@@ -135,6 +134,16 @@ export default function Header() {
                 onClick={closeMenu}
               >
                 LinkedIn
+              </a>
+
+              <a
+                href="https://www.websterfievre.com"
+                target="_blank"
+                rel="noreferrer"
+                className="nav-action-link"
+                onClick={closeMenu}
+              >
+                Website
               </a>
 
               <button
