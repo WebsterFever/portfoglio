@@ -137,6 +137,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [projectError, setProjectError] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
+  const [showAllProduction, setShowAllProduction] = useState(false);
+  const [showAllEducational, setShowAllEducational] = useState(false);
 
   const load = async () => {
     try {
@@ -177,6 +179,31 @@ export default function App() {
       );
     });
   }, [projects, query]);
+
+  const productionProjects = useMemo(
+    () =>
+      filtered.filter(
+        (project) =>
+          (project.category || 'production') !== 'educational'
+      ),
+    [filtered]
+  );
+
+  const educationalProjects = useMemo(
+    () =>
+      filtered.filter(
+        (project) => project.category === 'educational'
+      ),
+    [filtered]
+  );
+
+  const visibleProductionProjects = showAllProduction
+    ? productionProjects
+    : productionProjects.slice(0, 3);
+
+  const visibleEducationalProjects = showAllEducational
+    ? educationalProjects
+    : educationalProjects.slice(0, 3);
 
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
@@ -455,16 +482,108 @@ export default function App() {
             </div>
           )}
 
-          <div className="projects-grid">
-            {filtered.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onDeleted={onDeleted}
-                onUpdated={onUpdated}
-              />
-            ))}
-          </div>
+          {!projectError && filtered.length > 0 && (
+            <>
+              <section className="project-category-section production-projects-section">
+                <div className="project-category-header">
+                  <div>
+                    <h3>Freelance & Production Projects</h3>
+                    <p>
+                      Production-ready applications, deployed products and client-style work.
+                    </p>
+                  </div>
+
+                  <span className="project-category-count">
+                    {productionProjects.length}{' '}
+                    {productionProjects.length === 1 ? 'project' : 'projects'}
+                  </span>
+                </div>
+
+                {productionProjects.length > 0 ? (
+                  <>
+                    <div className="projects-grid">
+                      {visibleProductionProjects.map((project) => (
+                        <ProjectCard
+                          key={project.id}
+                          project={project}
+                          onDeleted={onDeleted}
+                          onUpdated={onUpdated}
+                        />
+                      ))}
+                    </div>
+
+                    {productionProjects.length > 3 && (
+                      <button
+                        type="button"
+                        className="projects-see-more"
+                        onClick={() =>
+                          setShowAllProduction((prev) => !prev)
+                        }
+                      >
+                        {showAllProduction
+                          ? 'Show Less'
+                          : `See ${productionProjects.length - 3} More`}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div className="empty-projects">
+                    No freelance or production projects match your search.
+                  </div>
+                )}
+              </section>
+
+              <section className="project-category-section educational-projects-section">
+                <div className="project-category-header">
+                  <div>
+                    <h3>Educational Projects</h3>
+                    <p>
+                      Academic and training projects that demonstrate technologies,
+                      architecture and software-engineering skills.
+                    </p>
+                  </div>
+
+                  <span className="project-category-count">
+                    {educationalProjects.length}{' '}
+                    {educationalProjects.length === 1 ? 'project' : 'projects'}
+                  </span>
+                </div>
+
+                {educationalProjects.length > 0 ? (
+                  <>
+                    <div className="projects-grid">
+                      {visibleEducationalProjects.map((project) => (
+                        <ProjectCard
+                          key={project.id}
+                          project={project}
+                          onDeleted={onDeleted}
+                          onUpdated={onUpdated}
+                        />
+                      ))}
+                    </div>
+
+                    {educationalProjects.length > 3 && (
+                      <button
+                        type="button"
+                        className="projects-see-more"
+                        onClick={() =>
+                          setShowAllEducational((prev) => !prev)
+                        }
+                      >
+                        {showAllEducational
+                          ? 'Show Less'
+                          : `See ${educationalProjects.length - 3} More`}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div className="empty-projects">
+                    No educational projects match your search.
+                  </div>
+                )}
+              </section>
+            </>
+          )}
 
         </section>
 
