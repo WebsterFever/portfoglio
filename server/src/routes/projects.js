@@ -5,29 +5,6 @@ import { upload } from '../middleware/upload.js';
 
 const router = express.Router();
 
-/* -------------------- CORS -------------------- */
-const ALLOWED = (process.env.CLIENT_ORIGIN || '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
-
-router.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (!origin || ALLOWED.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    res.setHeader('Vary', 'Origin');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    const reqHeaders = req.headers['access-control-request-headers'];
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      reqHeaders || 'Content-Type,Authorization,x-portfolio-code'
-    );
-    res.setHeader('Access-Control-Allow-Credentials', 'false');
-  }
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
-  next();
-});
-
 /* -------------------- Admin Guard -------------------- */
 const ADMIN_CODE = process.env.ADMIN_CODE;
 
@@ -56,17 +33,27 @@ function normalizeOptionalUrl(v) {
 
 // GET /api/projects
 router.get('/', async (_req, res) => {
-  const items = await Project.findAll({
-    order: [['createdAt', 'DESC']],
-  });
-  res.json(items);
+  try {
+    const items = await Project.findAll({
+      order: [['createdAt', 'DESC']],
+    });
+    res.json(items);
+  } catch (e) {
+    console.error('Failed to load projects:', e);
+    res.status(500).json({ message: 'Failed to load projects' });
+  }
 });
 
 // GET /api/projects/:id
 router.get('/:id', async (req, res) => {
-  const item = await Project.findByPk(req.params.id);
-  if (!item) return res.status(404).json({ message: 'Not found' });
-  res.json(item);
+  try {
+    const item = await Project.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ message: 'Not found' });
+    res.json(item);
+  } catch (e) {
+    console.error('Failed to load project:', e);
+    res.status(500).json({ message: 'Failed to load project' });
+  }
 });
 
 /* -------------------- Write Routes (Protected) -------------------- */
