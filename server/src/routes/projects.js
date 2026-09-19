@@ -80,6 +80,7 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
       link2,
       description,
       tags,
+      category,
       developedAt,
       inProduction
     } = req.body;
@@ -112,6 +113,7 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
       link2: normalizeOptionalUrl(link2),
       description,
       tags: parsedTags,
+      category: category === 'educational' ? 'educational' : 'production',
       imagePath,
       developed_at: developedAt || null,
       in_production:
@@ -139,6 +141,7 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       link2,
       description,
       tags,
+      category,
       developedAt,
       inProduction
     } = req.body;
@@ -170,6 +173,12 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       link,
       description,
       tags: parsedTags,
+      category:
+        typeof category === 'undefined'
+          ? item.category || 'production'
+          : category === 'educational'
+          ? 'educational'
+          : 'production',
       imagePath,
       developed_at: developedAt ?? item.developed_at,
       in_production:
