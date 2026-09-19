@@ -20,6 +20,11 @@ export default (sequelize) => {
 
       imagePath: { type: DataTypes.STRING(512), allowNull: true },
       description: { type: DataTypes.TEXT, allowNull: true },
+      category: {
+        type: DataTypes.STRING(32),
+        allowNull: false,
+        defaultValue: 'production',
+      },
       tags: {
         type: TagsType,
         allowNull: true,
