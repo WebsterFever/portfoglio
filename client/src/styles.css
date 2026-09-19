@@ -3260,3 +3260,128 @@ img {
 .profile-website:hover {
   text-decoration: underline;
 }
+
+/* =========================================================
+   PROJECT CATEGORIES
+========================================================= */
+
+.project-category-section {
+  margin-top: 30px;
+}
+
+.project-category-section + .project-category-section {
+  margin-top: 44px;
+  padding-top: 34px;
+  border-top: 1px solid var(--border);
+}
+
+.project-category-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.project-category-header h3 {
+  margin: 0;
+  color: var(--heading);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.project-category-header p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.project-category-count {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper-soft);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.projects-see-more {
+  display: block;
+  margin: 20px auto 0;
+  padding: 9px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.projects-see-more:hover {
+  background: var(--paper-soft);
+}
+
+.resume-project-form select,
+.project-edit-field select {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--text);
+  font-size: 12px;
+  outline: none;
+}
+
+.project-edit-field select {
+  padding: 11px 12px;
+  font-size: 14px;
+}
+
+.resume-project-form select:focus,
+.project-edit-field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+@media (max-width: 680px) {
+  .project-category-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .project-category-count {
+    align-self: flex-start;
+  }
+}
+
+@media print {
+  .educational-projects-section,
+  .projects-see-more,
+  .project-category-count {
+    display: none !important;
+  }
+
+  .production-projects-section {
+    display: block !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: 0 !important;
+  }
+
+  .production-projects-section .project-category-header {
+    display: none !important;
+  }
+
+  .production-projects-section .projects-grid {
+    display: grid !important;
+  }
+
+  .production-projects-section .project-card:nth-child(n + 4) {
+    display: grid !important;
+  }
+}
