@@ -33,6 +33,10 @@ export default function ProjectCard({
   const [editDescription, setEditDescription] =
     useState(project.description || '');
 
+  const [editCategory, setEditCategory] = useState(
+    project.category || 'production'
+  );
+
   const [editTags, setEditTags] =
     useState(
       Array.isArray(project.tags)
@@ -52,6 +56,7 @@ export default function ProjectCard({
     setEditLink(project.link || '');
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
+    setEditCategory(project.category || 'production');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -107,6 +112,7 @@ export default function ProjectCard({
     setEditLink(project.link || '');
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
+    setEditCategory(project.category || 'production');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -128,6 +134,7 @@ export default function ProjectCard({
     setEditLink(project.link || '');
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
+    setEditCategory(project.category || 'production');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -184,6 +191,7 @@ export default function ProjectCard({
       );
 
       form.append('tags', editTags);
+      form.append('category', editCategory);
 
       /*
        * IMPORTANT:
@@ -347,6 +355,30 @@ export default function ProjectCard({
               <small>
                 Separate technologies with commas.
               </small>
+            </div>
+
+            {/* CATEGORY */}
+
+            <div className="project-edit-field">
+              <label htmlFor={`category-${project.id}`}>
+                Project Category *
+              </label>
+
+              <select
+                id={`category-${project.id}`}
+                value={editCategory}
+                onChange={(e) =>
+                  setEditCategory(e.target.value)
+                }
+                required
+              >
+                <option value="production">
+                  Freelance / Production
+                </option>
+                <option value="educational">
+                  Educational
+                </option>
+              </select>
             </div>
 
             {/* DESCRIPTION */}
