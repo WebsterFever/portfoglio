@@ -18,6 +18,7 @@ export default function ProjectForm({
   const [description, setDescription] =
     useState('');
   const [tags, setTags] = useState('');
+  const [category, setCategory] = useState('production');
   const [file, setFile] = useState(null);
   const [loading, setLoading] =
     useState(false);
@@ -43,6 +44,7 @@ export default function ProjectForm({
       form.append('link2', link2);
       form.append('description', description);
       form.append('tags', tags);
+      form.append('category', category);
 
       if (file) {
         form.append('image', file);
@@ -76,6 +78,7 @@ export default function ProjectForm({
       setLink2('');
       setDescription('');
       setTags('');
+      setCategory('production');
       setFile(null);
 
       if (fileRef.current) {
@@ -151,6 +154,23 @@ export default function ProjectForm({
             setTags(e.target.value)
           }
         />
+      </div>
+
+      <div className="form-field">
+        <label>Project Category *</label>
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        >
+          <option value="production">
+            Freelance / Production
+          </option>
+          <option value="educational">
+            Educational
+          </option>
+        </select>
       </div>
 
       <div className="form-field form-full">
