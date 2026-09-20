@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import axios from 'axios';
 
 const API =
@@ -72,6 +73,29 @@ export default function ProjectCard({
 
     setEditImage(null);
   }, [project]);
+
+  // Keep the modal completely independent from the project card layout.
+  // Rendering it through a portal prevents card/grid transforms from
+  // making the fixed modal appear to resize or move.
+  useEffect(() => {
+    if (!promptOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setPromptOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [promptOpen]);
 
   // ==========================================
   // DELETE PROJECT
@@ -685,63 +709,66 @@ export default function ProjectCard({
 
       </div>
 
-      {promptOpen && project.buildPrompt?.trim() && (
-        <div
-          className="build-prompt-modal-backdrop"
-          role="presentation"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) {
-              setPromptOpen(false);
-            }
-          }}
-        >
-          <section
-            className="build-prompt-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={`build-prompt-title-${project.id}`}
+      {promptOpen &&
+        project.buildPrompt?.trim() &&
+        createPortal(
+          <div
+            className="build-prompt-modal-backdrop"
+            role="presentation"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) {
+                setPromptOpen(false);
+              }
+            }}
           >
-            <div className="build-prompt-modal-header">
-              <div>
-                <span className="build-prompt-kicker">
-                  AI-ASSISTED DEVELOPMENT
-                </span>
-                <h2 id={`build-prompt-title-${project.id}`}>
-                  {project.title}
-                </h2>
-                <p>
-                  The project specification and instructions used to guide the AI-assisted build.
-                </p>
+            <section
+              className="build-prompt-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`build-prompt-title-${project.id}`}
+            >
+              <div className="build-prompt-modal-header">
+                <div>
+                  <span className="build-prompt-kicker">
+                    AI-ASSISTED DEVELOPMENT
+                  </span>
+                  <h2 id={`build-prompt-title-${project.id}`}>
+                    {project.title}
+                  </h2>
+                  <p>
+                    The project specification and instructions used to guide the AI-assisted build.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className="build-prompt-close"
+                  onClick={() => setPromptOpen(false)}
+                  aria-label="Close build prompt"
+                >
+                  ×
+                </button>
               </div>
 
-              <button
-                type="button"
-                className="build-prompt-close"
-                onClick={() => setPromptOpen(false)}
-                aria-label="Close build prompt"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="build-prompt-modal-body">
-              <div className="build-prompt-label">
-                BUILD PROMPT
+              <div className="build-prompt-modal-body">
+                <div className="build-prompt-label">
+                  BUILD PROMPT
+                </div>
+                <pre>{project.buildPrompt}</pre>
               </div>
-              <pre>{project.buildPrompt}</pre>
-            </div>
 
-            <div className="build-prompt-modal-footer">
-              <button
-                type="button"
-                onClick={() => setPromptOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-          </section>
-        </div>
-      )}
+              <div className="build-prompt-modal-footer">
+                <button
+                  type="button"
+                  onClick={() => setPromptOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </section>
+          </div>,
+          document.body
+        )}
 
     </article>
   );
