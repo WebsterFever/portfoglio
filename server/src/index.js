@@ -92,6 +92,11 @@ app.use((err, _req, res, _next) => {
       ADD COLUMN IF NOT EXISTS "category" VARCHAR(32) NOT NULL DEFAULT 'production';
     `);
 
+    await sequelize.query(`
+      ALTER TABLE "projects"
+      ADD COLUMN IF NOT EXISTS "build_prompt" TEXT;
+    `);
+
     await sequelize.sync(); // For larger apps, prefer migrations
     console.log('DB connected & models synced.');
     app.listen(PORT, () => {
