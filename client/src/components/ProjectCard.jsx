@@ -414,7 +414,7 @@ export default function ProjectCard({
               </select>
             </div>
 
-            {/* AI BUILD PROMPT */}
+            {/* AI PROJECT INSTRUCTIONS */}
 
             <div className="project-edit-field project-edit-full">
               <label htmlFor={`build-prompt-${project.id}`}>
@@ -681,7 +681,7 @@ export default function ProjectCard({
             onClick={() => setPromptOpen(true)}
           >
             <span className="project-prompt-icon">✦</span>
-            View AI Build Prompt
+            View Project Instructions
           </button>
         )}
 
@@ -730,13 +730,13 @@ export default function ProjectCard({
               <div className="build-prompt-modal-header">
                 <div>
                   <span className="build-prompt-kicker">
-                    AI-ASSISTED DEVELOPMENT
+                    PROJECT INSTRUCTIONS
                   </span>
                   <h2 id={`build-prompt-title-${project.id}`}>
                     {project.title}
                   </h2>
                   <p>
-                    The project specification and instructions used to guide the AI-assisted build.
+                    The original instructions and requirements provided for this project.
                   </p>
                 </div>
 
