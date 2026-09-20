@@ -68,6 +68,7 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
       description,
       tags,
       category,
+      buildPrompt,
       developedAt,
       inProduction
     } = req.body;
@@ -101,6 +102,7 @@ router.post('/', ensureAdmin, upload.single('image'), async (req, res) => {
       description,
       tags: parsedTags,
       category: category === 'educational' ? 'educational' : 'production',
+      buildPrompt: typeof buildPrompt === 'string' ? buildPrompt.trim() || null : null,
       imagePath,
       developed_at: developedAt || null,
       in_production:
@@ -129,6 +131,7 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
       description,
       tags,
       category,
+      buildPrompt,
       developedAt,
       inProduction
     } = req.body;
@@ -166,6 +169,12 @@ router.put('/:id', ensureAdmin, upload.single('image'), async (req, res) => {
           : category === 'educational'
           ? 'educational'
           : 'production',
+      buildPrompt:
+        typeof buildPrompt === 'undefined'
+          ? item.buildPrompt
+          : typeof buildPrompt === 'string'
+          ? buildPrompt.trim() || null
+          : item.buildPrompt,
       imagePath,
       developed_at: developedAt ?? item.developed_at,
       in_production:
