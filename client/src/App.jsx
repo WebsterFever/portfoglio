@@ -76,18 +76,25 @@ const SKILLS = {
 
 const EXPERIENCE = [
   {
-    role: 'Full-Stack Developer',
-    company: 'Personal & Academic Projects',
-    period: 'Present',
+    role: 'AI Full Stack Engineer',
+    company: 'Self Employed · Freelance',
+    period: 'Sep 2023 — Present',
     description:
-      'Designing and developing full-stack applications with modern frontend, backend, database, cloud and AI technologies.',
+      'Designing, building and deploying full-stack applications across modern frontend technologies, backend systems, databases, APIs and cloud infrastructure, with a growing focus on AI-powered software.',
   },
   {
-    role: 'Technical Support Analyst',
-    company: 'Company Name — Placeholder',
-    period: '20XX — 20XX',
+    role: 'Developer',
+    company: 'Ambev',
+    period: 'Sep 2019 — May 2022',
     description:
-      'Provided technical support, investigated software and system issues, and assisted users with technology solutions.',
+      'Developed and maintained applications using C# and .NET, while building and supporting backend functionality, APIs and database integrations.',
+  },
+  {
+    role: 'Support Analyst',
+    company: 'T-Systems do Brasil',
+    period: 'Jun 2017 — Nov 2019',
+    description:
+      'Provided technical support for software, hardware and network systems, and resolved customer issues in German and English.',
   },
 ];
 
