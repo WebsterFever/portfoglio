@@ -19,6 +19,7 @@ export default function ProjectForm({
     useState('');
   const [tags, setTags] = useState('');
   const [category, setCategory] = useState('production');
+  const [buildPrompt, setBuildPrompt] = useState('');
   const [file, setFile] = useState(null);
   const [loading, setLoading] =
     useState(false);
@@ -45,6 +46,7 @@ export default function ProjectForm({
       form.append('description', description);
       form.append('tags', tags);
       form.append('category', category);
+      form.append('buildPrompt', buildPrompt);
 
       if (file) {
         form.append('image', file);
@@ -79,6 +81,7 @@ export default function ProjectForm({
       setDescription('');
       setTags('');
       setCategory('production');
+      setBuildPrompt('');
       setFile(null);
 
       if (fileRef.current) {
@@ -171,6 +174,20 @@ export default function ProjectForm({
             Educational
           </option>
         </select>
+      </div>
+
+      <div className="form-field form-full">
+        <label>AI Build Prompt <span className="optional-label">(optional)</span></label>
+        <textarea
+          className="build-prompt-input"
+          placeholder="Paste the prompt or project specification you used to guide the AI-assisted build..."
+          value={buildPrompt}
+          onChange={(e) => setBuildPrompt(e.target.value)}
+          rows="8"
+        />
+        <small className="form-help">
+          Recruiters can open this in a clean modal to see how you planned and directed the project.
+        </small>
       </div>
 
       <div className="form-field form-full">
