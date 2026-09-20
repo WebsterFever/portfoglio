@@ -13,6 +13,7 @@ export default function ProjectCard({
   const [expanded, setExpanded] = useState(false);
   const [showAllTags, setShowAllTags] =
     useState(false);
+  const [promptOpen, setPromptOpen] = useState(false);
 
   // ==========================================
   // EDIT STATE
@@ -37,6 +38,10 @@ export default function ProjectCard({
     project.category || 'production'
   );
 
+  const [editBuildPrompt, setEditBuildPrompt] = useState(
+    project.buildPrompt || ''
+  );
+
   const [editTags, setEditTags] =
     useState(
       Array.isArray(project.tags)
@@ -57,6 +62,7 @@ export default function ProjectCard({
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
     setEditCategory(project.category || 'production');
+    setEditBuildPrompt(project.buildPrompt || '');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -113,6 +119,7 @@ export default function ProjectCard({
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
     setEditCategory(project.category || 'production');
+    setEditBuildPrompt(project.buildPrompt || '');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -135,6 +142,7 @@ export default function ProjectCard({
     setEditLink2(project.link2 || '');
     setEditDescription(project.description || '');
     setEditCategory(project.category || 'production');
+    setEditBuildPrompt(project.buildPrompt || '');
 
     setEditTags(
       Array.isArray(project.tags)
@@ -192,6 +200,7 @@ export default function ProjectCard({
 
       form.append('tags', editTags);
       form.append('category', editCategory);
+      form.append('buildPrompt', editBuildPrompt);
 
       /*
        * IMPORTANT:
@@ -379,6 +388,29 @@ export default function ProjectCard({
                   Educational
                 </option>
               </select>
+            </div>
+
+            {/* AI BUILD PROMPT */}
+
+            <div className="project-edit-field project-edit-full">
+              <label htmlFor={`build-prompt-${project.id}`}>
+                AI Build Prompt
+              </label>
+
+              <textarea
+                id={`build-prompt-${project.id}`}
+                className="build-prompt-input"
+                value={editBuildPrompt}
+                onChange={(e) =>
+                  setEditBuildPrompt(e.target.value)
+                }
+                placeholder="Paste the prompt or project specification used to guide the AI-assisted build..."
+                rows="9"
+              />
+
+              <small>
+                Leave empty if this project does not have a build prompt.
+              </small>
             </div>
 
             {/* DESCRIPTION */}
@@ -616,6 +648,19 @@ export default function ProjectCard({
 
         </div>
 
+        {/* AI BUILD PROMPT */}
+
+        {project.buildPrompt?.trim() && (
+          <button
+            type="button"
+            className="project-prompt-button"
+            onClick={() => setPromptOpen(true)}
+          >
+            <span className="project-prompt-icon">✦</span>
+            View AI Build Prompt
+          </button>
+        )}
+
         {/* ADMIN ACTIONS */}
 
         <div className="project-admin-actions">
@@ -639,6 +684,64 @@ export default function ProjectCard({
         </div>
 
       </div>
+
+      {promptOpen && project.buildPrompt?.trim() && (
+        <div
+          className="build-prompt-modal-backdrop"
+          role="presentation"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              setPromptOpen(false);
+            }
+          }}
+        >
+          <section
+            className="build-prompt-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`build-prompt-title-${project.id}`}
+          >
+            <div className="build-prompt-modal-header">
+              <div>
+                <span className="build-prompt-kicker">
+                  AI-ASSISTED DEVELOPMENT
+                </span>
+                <h2 id={`build-prompt-title-${project.id}`}>
+                  {project.title}
+                </h2>
+                <p>
+                  The project specification and instructions used to guide the AI-assisted build.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="build-prompt-close"
+                onClick={() => setPromptOpen(false)}
+                aria-label="Close build prompt"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="build-prompt-modal-body">
+              <div className="build-prompt-label">
+                BUILD PROMPT
+              </div>
+              <pre>{project.buildPrompt}</pre>
+            </div>
+
+            <div className="build-prompt-modal-footer">
+              <button
+                type="button"
+                onClick={() => setPromptOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
 
     </article>
   );
