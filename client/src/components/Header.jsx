@@ -38,14 +38,14 @@ export default function Header() {
 
           <div className="profile-copy">
             <p className="profile-eyebrow">
-              SOFTWARE DEVELOPER
+              SOFTWARE ENGINEER
             </p>
 
             <h1>Webster Fievre</h1>
 
             <h2>
-              Full-Stack Developer
-              <span> | </span>
+              Full-Stack Development
+              <span> • </span>
               AI Engineering
             </h2>
 
