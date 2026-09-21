@@ -19,7 +19,8 @@ const SKILLS = {
     'HTML5',
     'CSS3',
     'Tailwind CSS',
-    'Responsive Design',
+    'Redux Toolkit',
+    'React Router',
   ],
 
   Backend: [
@@ -29,43 +30,36 @@ const SKILLS = {
     'REST APIs',
     'PostgreSQL',
     'MongoDB',
+    'Prisma',
     'JWT Authentication',
   ],
 
   'AI Engineering': [
-    'Generative AI',
     'LLM Applications',
     'RAG',
     'Vector Search',
     'AI Agents',
-    'Multi-Agent Systems',
-    'Multimodal AI',
-    'MCP',
+    'Prompt Engineering',
   ],
 
-  'Java Backend': [
-    'Java',
-    'Spring Boot',
-    'JPA / Hibernate',
-    'Spring Data JPA',
-    'Spring Security',
-  ],
-
-  '.NET Backend': [
-    'C#',
-    '.NET',
-    'ASP.NET Core',
-    'Entity Framework',
-    'LINQ',
-  ],
-
-  'DevOps & Tools': [
+  'Cloud & DevOps': [
     'Docker',
     'Docker Compose',
-    'Railway',
+    'AWS',
     'Vercel',
+    'Railway',
     'Git',
     'GitHub',
+    'CI/CD',
+  ],
+
+  'Testing & Engineering': [
+    'Vitest',
+    'React Testing Library',
+    'API Testing',
+    'Authentication',
+    'Application Security',
+    'Responsive Design',
   ],
 };
 
@@ -76,11 +70,11 @@ const SKILLS = {
 
 const EXPERIENCE = [
   {
-    role: 'AI Full Stack Engineer',
-    company: 'Self Employed · Freelance',
+    role: 'Full-Stack Software Engineer',
+    company: 'Independent Projects',
     period: 'Sep 2023 — Present',
     description:
-      'Designing, building and deploying full-stack applications across modern frontend technologies, backend systems, databases, APIs and cloud infrastructure, with a growing focus on AI-powered software.',
+      'Design, develop and deploy full-stack applications using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL, including REST APIs, authentication, database architecture, cloud deployment and AI-powered application features.',
   },
   {
     role: 'Developer',
@@ -255,11 +249,11 @@ export default function App() {
           </div>
 
           <p className="professional-summary">
-            Full-Stack Developer building scalable web applications
-            with modern frontend, backend, database and cloud
-            technologies. Expanding my expertise in AI Engineering,
-            Java/Spring Boot and C#/.NET, with a focus on intelligent,
-            secure and production-ready software.
+            Full-Stack Software Engineer specializing in modern web
+            applications and AI-powered software. I build and deploy
+            production-oriented applications across frontend, backend,
+            databases, APIs and cloud infrastructure, while developing
+            expertise in AI application engineering.
           </p>
         </section>
 
