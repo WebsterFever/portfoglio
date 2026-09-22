@@ -120,31 +120,13 @@ export default function Header() {
             <div className="nav-actions">
 
               <a
-                href="mailto:your-email@example.com"
-                className="nav-action-link"
-                onClick={closeMenu}
-              >
-                Email
-              </a>
-
-              <a
-                href="https://github.com/"
+                href="https://github.com/WebsterFever"
                 target="_blank"
                 rel="noreferrer"
                 className="nav-action-link"
                 onClick={closeMenu}
               >
                 GitHub
-              </a>
-
-              <a
-                href="https://www.linkedin.com/"
-                target="_blank"
-                rel="noreferrer"
-                className="nav-action-link"
-                onClick={closeMenu}
-              >
-                LinkedIn
               </a>
 
               <a
