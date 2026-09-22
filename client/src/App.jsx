@@ -35,6 +35,7 @@ const SKILLS = {
   ],
 
   'AI Engineering': [
+    'Generative AI',
     'LLM Applications',
     'RAG',
     'Vector Search',
@@ -71,24 +72,35 @@ const SKILLS = {
 const EXPERIENCE = [
   {
     role: 'Full-Stack Software Engineer',
-    company: 'Independent Projects',
+    company: 'Independent',
     period: 'Sep 2023 — Present',
-    description:
-      'Design, develop and deploy full-stack applications using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL, including REST APIs, authentication, database architecture, cloud deployment and AI-powered application features.',
+    bullets: [
+      'Design, develop and deploy full-stack applications using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL.',
+      'Build REST APIs, authentication systems, database architectures and third-party integrations.',
+      'Develop AI-powered features using LLM APIs, RAG, vector search and AI application workflows.',
+      'Deploy applications using Vercel, Railway, AWS and Docker.',
+      'Implement automated testing, responsive interfaces, security practices and production-oriented application architectures.',
+    ],
   },
   {
     role: 'Developer',
     company: 'Ambev',
     period: 'Sep 2019 — May 2022',
-    description:
-      'Developed and maintained applications using C# and .NET, while building and supporting backend functionality, APIs and database integrations.',
+    bullets: [
+      'Developed and maintained enterprise software applications supporting business operations.',
+      'Built and supported backend functionality, APIs and database integrations using C# and .NET.',
+      'Investigated application issues, implemented fixes and supported production-system reliability.',
+    ],
   },
   {
     role: 'Support Analyst',
     company: 'T-Systems do Brasil',
     period: 'Jun 2017 — Nov 2019',
-    description:
-      'Provided technical support for software, hardware and network systems, and resolved customer issues in German and English.',
+    bullets: [
+      'Provided technical support for software, hardware and network environments.',
+      'Diagnosed and resolved technical issues in a production support environment.',
+      'Supported users in German and English and coordinated escalations when required.',
+    ],
   },
 ];
 
@@ -113,22 +125,12 @@ const TRAINING = [
   {
     title: 'AI Engineering',
     description:
-      'Generative AI, LLM applications, RAG, vector search, agents, multimodal systems and AI application architecture.',
+      'Generative AI, LLM applications, RAG, vector search, AI agents and AI application architecture.',
   },
   {
     title: 'Full-Stack Development',
     description:
-      'Modern frontend and backend application development, APIs, databases, authentication and deployment.',
-  },
-  {
-    title: 'Java & Spring Boot',
-    description:
-      'Java, object-oriented programming, JPA/Hibernate, Spring Boot, Spring Data and application security.',
-  },
-  {
-    title: 'C# & .NET',
-    description:
-      'C#, ASP.NET Core, Entity Framework, LINQ, APIs and enterprise backend development.',
+      'Modern frontend and backend development, APIs, databases, authentication, testing and deployment.',
   },
 ];
 
@@ -250,10 +252,11 @@ export default function App() {
 
           <p className="professional-summary">
             Full-Stack Software Engineer specializing in modern web
-            applications and AI-powered software. I build and deploy
-            production-oriented applications across frontend, backend,
-            databases, APIs and cloud infrastructure, while developing
-            expertise in AI application engineering.
+            applications and AI-powered software. I design, build and
+            deploy production-oriented applications across frontend,
+            backend, databases, APIs and cloud infrastructure, with a
+            growing focus on AI application engineering, LLM
+            integrations and intelligent software systems.
           </p>
         </section>
 
@@ -315,7 +318,15 @@ export default function App() {
                     </span>
                   </div>
 
-                  <p>{item.description}</p>
+                  {item.bullets ? (
+                    <ul className="experience-bullets">
+                      {item.bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{item.description}</p>
+                  )}
                 </div>
               </article>
             ))}
@@ -361,7 +372,7 @@ export default function App() {
           <div className="section-heading">
             <span>05</span>
             <h2>
-              Certifications & Continuing Education
+              Professional Development
             </h2>
           </div>
 
@@ -488,9 +499,9 @@ export default function App() {
               <section className="project-category-section production-projects-section">
                 <div className="project-category-header">
                   <div>
-                    <h3>Freelance & Production Projects</h3>
+                    <h3>Featured Projects</h3>
                     <p>
-                      Production-ready applications, deployed products and client-style work.
+                      Selected production-oriented and deployed applications that best represent my full-stack engineering work.
                     </p>
                   </div>
 
@@ -529,7 +540,7 @@ export default function App() {
                   </>
                 ) : (
                   <div className="empty-projects">
-                    No freelance or production projects match your search.
+                    No featured projects match your search.
                   </div>
                 )}
               </section>
@@ -537,10 +548,9 @@ export default function App() {
               <section className="project-category-section educational-projects-section">
                 <div className="project-category-header">
                   <div>
-                    <h3>Educational Projects</h3>
+                    <h3>Additional Projects</h3>
                     <p>
-                      Academic and training projects that demonstrate technologies,
-                      architecture and software-engineering skills.
+                      Additional academic and training work demonstrating technologies, architecture and software-engineering skills.
                     </p>
                   </div>
 
@@ -579,7 +589,7 @@ export default function App() {
                   </>
                 ) : (
                   <div className="empty-projects">
-                    No educational projects match your search.
+                    No additional projects match your search.
                   </div>
                 )}
               </section>
