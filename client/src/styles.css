@@ -3594,3 +3594,42 @@ img {
     display: none !important;
   }
 }
+
+
+/* =========================================================
+   EXPERIENCE BULLETS
+========================================================= */
+
+.experience-bullets {
+  margin: 10px 0 0;
+  padding-left: 19px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.experience-bullets li + li {
+  margin-top: 5px;
+}
+
+@media (max-width: 680px) {
+  .experience-bullets {
+    padding-left: 17px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+@media print {
+  .experience-bullets {
+    margin-top: 5px !important;
+    padding-left: 14px !important;
+    color: #475467 !important;
+    font-size: 7.5px !important;
+    line-height: 1.45 !important;
+  }
+
+  .experience-bullets li + li {
+    margin-top: 2px !important;
+  }
+}
