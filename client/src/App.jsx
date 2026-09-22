@@ -108,9 +108,9 @@ const EDUCATION = [
   {
     program: 'Computer Engineering',
     school: 'Instituto Infnet',
-    period: 'In Progress',
+    period: 'In Progress · 3rd Semester — Back-End Development',
     description:
-      'Software engineering, programming, frontend development, mobile development and computer engineering studies.',
+      'Currently focused on back-end development with Java, C#, Spring Boot, .NET and databases. The broader program covers computer science, scalable software architecture, DevSecOps, distributed systems, AI and machine learning, embedded systems and robotics.',
   },
   {
     program: 'Full-Stack Development & AI Engineering',
