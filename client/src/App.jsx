@@ -72,10 +72,10 @@ const SKILLS = {
 const EXPERIENCE = [
   {
     role: 'Full-Stack Software Engineer',
-    company: 'Independent',
+    company: 'Independent / Freelance',
     period: 'Sep 2023 — Present',
     bullets: [
-      'Design, develop and deploy full-stack applications using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL.',
+      'Design, develop and deploy full-stack applications for paying clients and independent products using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL.',
       'Build REST APIs, authentication systems, database architectures and third-party integrations.',
       'Develop AI-powered features using LLM APIs, RAG, vector search and AI application workflows.',
       'Deploy applications using Vercel, Railway, AWS and Docker.',
