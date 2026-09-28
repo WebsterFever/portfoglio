@@ -71,7 +71,7 @@ const SKILLS = {
 
 const EXPERIENCE = [
   {
-    role: 'Software Developer',
+    role: 'AI Software Developer',
     company: 'HTDIGITALHUB',
     period: '2022 — Present',
     bullets: [
