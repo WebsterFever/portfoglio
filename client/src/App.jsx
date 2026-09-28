@@ -72,10 +72,10 @@ const SKILLS = {
 const EXPERIENCE = [
   {
     role: 'AI Software Developer',
-    company: 'HTDIGITALHUB',
+    company: 'HTnovaTech',
     period: '2022 — Present',
     bullets: [
-      'Develop and maintain HTDIGITALHUB\'s production digital lottery platform used by real customers across web and mobile applications.',
+      'Develop and maintain HTnovaTech\'s production digital lottery platform used by real customers across web and mobile applications.',
       'Build and maintain frontend and backend features using React, JavaScript, Vite, Node.js, Express.js, REST APIs and Axios.',
       'Manage PostgreSQL data and schema changes with Sequelize ORM, including production database updates and migrations.',
       'Implement JWT authentication, protected routes, admin/user role authorization and role-based access control.',
