@@ -38,6 +38,7 @@ app.use((req, res, next) => {
     ...ALLOWED_ORIGINS,
     'https://websterfievre.com',
     'https://www.websterfievre.com',
+    'https://portfolio-webster.vercel.app',
     'http://localhost:5173',
   ]);
 
