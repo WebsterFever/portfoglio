@@ -71,16 +71,21 @@ const SKILLS = {
 
 const EXPERIENCE = [
   {
-    role: 'Full-Stack Software Engineer',
-    company: 'Independent / Freelance',
-    period: 'Sep 2023 — Present',
+    role: 'Software Developer',
+    company: 'HTDIGITALHUB',
+    period: '2022 — Present',
     bullets: [
-      'Design, develop and deploy full-stack applications for paying clients and independent products using React, TypeScript, Next.js, Node.js, NestJS and PostgreSQL.',
-      'Build REST APIs, authentication systems, database architectures and third-party integrations.',
-      'Develop AI-powered features using LLM APIs, RAG, vector search and AI application workflows.',
-      'Deploy applications using Vercel, Railway, AWS and Docker.',
-      'Implement automated testing, responsive interfaces, security practices and production-oriented application architectures.',
+      'Develop and maintain BoletApp, a production web and mobile platform serving real users as part of an ongoing paid development engagement.',
+      'Build and maintain frontend and backend features using React, JavaScript, Vite, Node.js, Express.js, REST APIs and Axios.',
+      'Manage PostgreSQL data and schema changes with Sequelize ORM, including production database updates and migrations.',
+      'Implement JWT authentication, protected routes, admin/user role authorization and role-based access control.',
+      'Develop real-time notification features with Socket.IO and persistent notification workflows.',
+      'Integrate InfinitePay checkout and webhook payment flows and maintain production payment functionality.',
+      'Develop and maintain the React Native mobile application with Expo and deploy backend/database services through Railway.',
+      'Use Git and GitHub for version control while handling CORS, environment variables, responsive design and production debugging.',
     ],
+    techStack:
+      'React • React Native • JavaScript • Node.js • Express.js • PostgreSQL • Sequelize • REST APIs • JWT • Socket.IO • Axios • Vite • Expo • InfinitePay API • Railway • Git • GitHub',
   },
   {
     role: 'Developer',
@@ -326,6 +331,12 @@ export default function App() {
                     </ul>
                   ) : (
                     <p>{item.description}</p>
+                  )}
+
+                  {item.techStack && (
+                    <p className="experience-tech-stack">
+                      <strong>Tech Stack:</strong> {item.techStack}
+                    </p>
                   )}
                 </div>
               </article>
