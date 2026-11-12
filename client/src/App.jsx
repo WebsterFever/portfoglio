@@ -257,12 +257,17 @@ export default function App() {
           </div>
 
           <p className="professional-summary">
-            Full-Stack Software Engineer specializing in modern web
-            applications and AI-powered software. I design, build and
-            deploy production-oriented applications across frontend,
-            backend, databases, APIs and cloud infrastructure, with a
-            growing focus on AI application engineering, LLM
-            integrations and intelligent software systems.
+            Full-Stack Software Engineer and AI Software Developer with
+            professional experience building and maintaining production
+            web and mobile applications for real customers. Skilled in
+            React, TypeScript, JavaScript, Node.js, Express.js, NestJS,
+            PostgreSQL, REST APIs, JWT authentication, Docker, Git,
+            GitHub, Vercel and Railway. Experienced in payment
+            integrations, database design, API development and
+            production troubleshooting, with a growing focus on
+            Generative AI, LLM applications, RAG and AI agents.
+            Seeking software engineering opportunities where I can
+            contribute to reliable, scalable and AI-powered products.
           </p>
         </section>
 
