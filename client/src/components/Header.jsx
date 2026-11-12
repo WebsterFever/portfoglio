@@ -153,16 +153,14 @@ export default function Header() {
                 {theme === 'light' ? '🌙' : '☀️'}
               </button>
 
-              <button
-                type="button"
+              <a
+                href="/resume.html"
                 className="nav-download-button"
-                onClick={() => {
-                  closeMenu();
-                  window.print();
-                }}
+                onClick={closeMenu}
+                aria-label="Open Harvard-format resume for printing or saving as PDF"
               >
-                ↓ Download Résumé
-              </button>
+                ↓ View / Download CV
+              </a>
 
             </div>
 
