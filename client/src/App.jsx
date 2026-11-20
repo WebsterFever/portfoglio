@@ -147,7 +147,6 @@ export default function App() {
   const [projectError, setProjectError] = useState(false);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showAllProduction, setShowAllProduction] = useState(false);
-  const [showAllEducational, setShowAllEducational] = useState(false);
 
   const load = async () => {
     try {
@@ -198,21 +197,16 @@ export default function App() {
     [filtered]
   );
 
-  const educationalProjects = useMemo(
-    () =>
-      filtered.filter(
-        (project) => project.category === 'educational'
-      ),
-    [filtered]
+  // Keep other projects in the database, but showcase only the three selected works.
+  const featuredProjects = productionProjects.filter((project) =>
+    ['haiti loto digital', 'webster technology school', 'goalflow'].includes(
+      (project.title || '').trim().toLowerCase()
+    )
   );
 
   const visibleProductionProjects = showAllProduction
-    ? productionProjects
-    : productionProjects.slice(0, 3);
-
-  const visibleEducationalProjects = showAllEducational
-    ? educationalProjects
-    : educationalProjects.slice(0, 3);
+    ? featuredProjects
+    : featuredProjects.slice(0, 3);
 
   const onCreated = (project) => {
     setProjects((prev) => [project, ...prev]);
@@ -523,12 +517,12 @@ export default function App() {
                   </div>
 
                   <span className="project-category-count">
-                    {productionProjects.length}{' '}
-                    {productionProjects.length === 1 ? 'project' : 'projects'}
+                    {featuredProjects.length}{' '}
+                    {featuredProjects.length === 1 ? 'project' : 'projects'}
                   </span>
                 </div>
 
-                {productionProjects.length > 0 ? (
+                {featuredProjects.length > 0 ? (
                   <>
                     <div className="projects-grid">
                       {visibleProductionProjects.map((project) => (
@@ -541,7 +535,7 @@ export default function App() {
                       ))}
                     </div>
 
-                    {productionProjects.length > 3 && (
+                    {featuredProjects.length > 3 && (
                       <button
                         type="button"
                         className="projects-see-more"
@@ -551,7 +545,7 @@ export default function App() {
                       >
                         {showAllProduction
                           ? 'Show Less'
-                          : `See ${productionProjects.length - 3} More`}
+                          : `See ${featuredProjects.length - 3} More`}
                       </button>
                     )}
                   </>
@@ -562,54 +556,7 @@ export default function App() {
                 )}
               </section>
 
-              <section className="project-category-section educational-projects-section">
-                <div className="project-category-header">
-                  <div>
-                    <h3>Additional Projects</h3>
-                    <p>
-                      Additional academic and training work demonstrating technologies, architecture and software-engineering skills.
-                    </p>
-                  </div>
 
-                  <span className="project-category-count">
-                    {educationalProjects.length}{' '}
-                    {educationalProjects.length === 1 ? 'project' : 'projects'}
-                  </span>
-                </div>
-
-                {educationalProjects.length > 0 ? (
-                  <>
-                    <div className="projects-grid">
-                      {visibleEducationalProjects.map((project) => (
-                        <ProjectCard
-                          key={project.id}
-                          project={project}
-                          onDeleted={onDeleted}
-                          onUpdated={onUpdated}
-                        />
-                      ))}
-                    </div>
-
-                    {educationalProjects.length > 3 && (
-                      <button
-                        type="button"
-                        className="projects-see-more"
-                        onClick={() =>
-                          setShowAllEducational((prev) => !prev)
-                        }
-                      >
-                        {showAllEducational
-                          ? 'Show Less'
-                          : `See ${educationalProjects.length - 3} More`}
-                      </button>
-                    )}
-                  </>
-                ) : (
-                  <div className="empty-projects">
-                    No additional projects match your search.
-                  </div>
-                )}
-              </section>
             </>
           )}
 
