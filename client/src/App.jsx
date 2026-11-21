@@ -24,6 +24,9 @@ const SKILLS = {
   ],
 
   Backend: [
+    'C#',
+    '.NET',
+    'ASP.NET Core',
     'Node.js',
     'NestJS',
     'Express',
@@ -114,7 +117,7 @@ const EDUCATION = [
   {
     program: 'Computer Engineering',
     school: 'Instituto Infnet',
-    period: 'In Progress · 3rd Semester — Back-End Development',
+    period: 'In Progress · Expected Graduation: 2028',
     description:
       'Currently focused on back-end development with Java, C#, Spring Boot, .NET and databases. The broader program covers computer science, scalable software architecture, DevSecOps, distributed systems, AI and machine learning, embedded systems and robotics.',
   },
@@ -251,17 +254,12 @@ export default function App() {
           </div>
 
           <p className="professional-summary">
-            Full-Stack Software Engineer and AI Software Developer with
-            professional experience building and maintaining production
-            web and mobile applications for real customers. Skilled in
-            React, TypeScript, JavaScript, Node.js, Express.js, NestJS,
-            PostgreSQL, REST APIs, JWT authentication, Docker, Git,
-            GitHub, Vercel and Railway. Experienced in payment
-            integrations, database design, API development and
-            production troubleshooting, with a growing focus on
-            Generative AI, LLM applications, RAG and AI agents.
-            Seeking software engineering opportunities where I can
-            contribute to reliable, scalable and AI-powered products.
+            Full-Stack Software Engineer with experience developing web and mobile
+            applications. Skilled in C#, .NET, ASP.NET Core, React, TypeScript,
+            Node.js, NestJS, PostgreSQL, REST APIs and cloud deployment.
+            Currently studying Computer Engineering at Instituto Infnet
+            (expected graduation: 2028). Seeking software development
+            opportunities in Canada and remotely.
           </p>
         </section>
 
