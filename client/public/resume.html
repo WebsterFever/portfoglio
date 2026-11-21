@@ -8,9 +8,9 @@
 </style>
 </head>
 <body>
-<div class="controls"><a href="/">← Portfolio</a><label for="language">Resume language <select id="language" aria-label="Choose resume language"><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option></select></label><button id="download" type="button">Download PDF / Print</button></div>
+<div class="controls"><a href="/">← Portfolio</a><label for="language">Resume language <select id="language" aria-label="Choose resume language"><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option></select></label><button id="download" type="button">Download Harvard PDF</button><button id="print" type="button">Print</button></div>
 <main class="paper" id="resume" aria-live="polite"></main>
-<p class="note">Choose a language, then select “Download PDF / Print” and choose “Save as PDF”. The print layout uses a simple single-column Harvard-style format. Confirm page count before submitting. Disable browser headers and footers if your print dialog enables them.</p>
+<p class="note">Download a standalone Harvard-style PDF in your selected language. You can also print the resume separately.</p>
 <script>
 const content={
 en:{
@@ -73,5 +73,29 @@ const projects=d.projects.map(([k,v])=>'<p class="entry"><strong>'+safe(k)+':</s
 const education=d.education.map(([k,v])=>'<p class="entry"><strong>'+safe(k)+':</strong> '+safe(v)+'</p>').join('');
 document.getElementById('resume').innerHTML='<header><h1>WEBSTER FIEVRE</h1><div class="role">'+safe(d.title)+'</div><div class="contact">'+safe(d.location)+' | <a href="mailto:webstersevenlanguages@gmail.com">webstersevenlanguages@gmail.com</a> | <a href="https://www.linkedin.com/in/webster-fievre-41365b242/">LinkedIn</a> | <a href="https://www.websterfievre.com">websterfievre.com</a> | <a href="https://github.com/WebsterFever">GitHub</a></div></header>'+section(d.summaryTitle,'<p>'+safe(d.summary)+'</p>')+section(d.skillsTitle,skills)+section(d.experienceTitle,jobs)+section(d.projectsTitle,projects)+section(d.educationTitle,education)+section(d.languagesTitle,'<p>'+safe(d.languages)+'</p>');
 }
-const selector=document.getElementById('language');const requested=new URLSearchParams(location.search).get('lang');if(content[requested])selector.value=requested;render(selector.value);selector.addEventListener('change',()=>{render(selector.value);history.replaceState(null,'',location.pathname+'?lang='+selector.value)});document.getElementById('download').addEventListener('click',()=>window.print());
+const selector=document.getElementById('language');const requested=new URLSearchParams(location.search).get('lang');if(content[requested])selector.value=requested;render(selector.value);selector.addEventListener('change',()=>{render(selector.value);history.replaceState(null,'',location.pathname+'?lang='+selector.value)});document.getElementById('print').addEventListener('click',()=>window.print());
+document.getElementById('download').addEventListener('click',async()=>{
+ const btn=document.getElementById('download');btn.disabled=true;btn.textContent='Preparing PDF…';
+ try{
+  if(!window.jspdf){await new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc)})}
+  const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:'pt',format:'letter'});const d=content[selector.value]||content.en;
+  const margin=48,maxWidth=516;let y=43;const bottom=755;
+  function line(t,size=9,bold=false,center=false,indent=0){
+   pdf.setFont('helvetica',bold?'bold':'normal');pdf.setFontSize(size);pdf.setTextColor(0);
+   const chunks=pdf.splitTextToSize(String(t),maxWidth-indent);const lead=size*1.29;
+   if(y+chunks.length*lead>bottom){pdf.addPage();y=43}
+   chunks.forEach(c=>{pdf.text(c,center?306:margin+indent,y,{align:center?'center':'left'});y+=lead});
+  }
+  function heading(t){y+=7;line(t.toUpperCase(),10,true);y+=1;pdf.setLineWidth(.6);pdf.line(margin,y,612-margin,y);y+=10}
+  line('WEBSTER FIEVRE',17,true,true);y+=3;line(d.title,10,false,true);line(d.location+' | webstersevenlanguages@gmail.com | websterfievre.com | github.com/WebsterFever',8,false,true);
+  heading(d.summaryTitle);line(d.summary,9);
+  heading(d.skillsTitle);d.skills.forEach(([name,items])=>{line(name+': '+items,8.6);y+=2});
+  heading(d.experienceTitle);d.jobs.forEach(j=>{y+=5;line(j.company+' | '+j.role+' | '+j.date,9,true);j.bullets.forEach(b=>{line('- '+b,8.6,false,false,10);y+=1})});
+  heading(d.projectsTitle);d.projects.forEach(([name,desc])=>{line(name+': '+desc,8.6);y+=2});
+  heading(d.educationTitle);d.education.forEach(([name,desc])=>{line(name+': '+desc,8.6);y+=2});
+  heading(d.languagesTitle);line(d.languages,8.6);
+  pdf.save('Webster_Fievre_Harvard_Resume_'+selector.value.toUpperCase()+'.pdf');
+ }catch(e){alert('PDF generation unavailable. Please use Print and Save as PDF.');console.error(e)}
+ finally{btn.disabled=false;btn.textContent='Download Harvard PDF'}
+});
 </script></body></html>
