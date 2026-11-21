@@ -8,7 +8,7 @@
 </style>
 </head>
 <body>
-<div class="controls"><a href="/">← Portfolio</a><label for="language">Resume language <select id="language" aria-label="Choose resume language"><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option></select></label><button id="download" type="button">Save as PDF / Print</button><button id="print" type="button">Print</button></div>
+<div class="controls"><a href="/">← Portfolio</a><label for="language">Resume language <select id="language" aria-label="Choose resume language"><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option></select></label><button id="download" type="button">Save as PDF / Print</button></div>
 <main class="paper" id="resume" aria-live="polite"></main>
 <p class="note">Choose a language and tap Save as PDF / Print. On iPhone, use the Share button in the print preview to save the PDF to Files.</p>
 <script>
@@ -73,6 +73,6 @@ const projects=d.projects.map(([k,v])=>'<p class="entry"><strong>'+safe(k)+':</s
 const education=d.education.map(([k,v])=>'<p class="entry"><strong>'+safe(k)+':</strong> '+safe(v)+'</p>').join('');
 document.getElementById('resume').innerHTML='<header><h1>WEBSTER FIEVRE</h1><div class="role">'+safe(d.title)+'</div><div class="contact">'+safe(d.location)+' | <a href="mailto:webstersevenlanguages@gmail.com">webstersevenlanguages@gmail.com</a> | <a href="https://www.linkedin.com/in/webster-fievre-41365b242/">LinkedIn</a> | <a href="https://www.websterfievre.com">websterfievre.com</a> | <a href="https://github.com/WebsterFever">GitHub</a></div></header>'+section(d.summaryTitle,'<p>'+safe(d.summary)+'</p>')+section(d.skillsTitle,skills)+section(d.experienceTitle,jobs)+section(d.projectsTitle,projects)+section(d.educationTitle,education)+section(d.languagesTitle,'<p>'+safe(d.languages)+'</p>');
 }
-const selector=document.getElementById('language');const requested=new URLSearchParams(location.search).get('lang');if(content[requested])selector.value=requested;render(selector.value);selector.addEventListener('change',()=>{render(selector.value);history.replaceState(null,'',location.pathname+'?lang='+selector.value)});document.getElementById('print').addEventListener('click',()=>window.print());
+const selector=document.getElementById('language');const requested=new URLSearchParams(location.search).get('lang');if(content[requested])selector.value=requested;render(selector.value);selector.addEventListener('change',()=>{render(selector.value);history.replaceState(null,'',location.pathname+'?lang='+selector.value)});
 document.getElementById('download').addEventListener('click',()=>window.print());
 </script></body></html>
