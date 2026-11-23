@@ -44,9 +44,13 @@ export default function Header() {
             <h1>Webster Fievre</h1>
 
             <h2>
-              Full-Stack Development
-              <span> • </span>
-              AI Engineering
+              Full-Stack Software Engineer
+              <span> | </span>
+              C#/.NET • ASP.NET Core
+              <span> | </span>
+              React • TypeScript
+              <span> | </span>
+              Cloud &amp; AI Development
             </h2>
 
             <div className="profile-contact-info">
