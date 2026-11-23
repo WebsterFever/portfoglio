@@ -254,12 +254,13 @@ export default function App() {
           </div>
 
           <p className="professional-summary">
-            Full-Stack Software Engineer with experience developing web and mobile
-            applications. Skilled in C#, .NET, ASP.NET Core, React, TypeScript,
-            Node.js, NestJS, PostgreSQL, REST APIs and cloud deployment.
-            Currently studying Computer Engineering at Instituto Infnet
-            (expected graduation: 2028). Seeking software development
-            opportunities in Canada and remotely.
+            Full-Stack Software Engineer focused on C#/.NET, ASP.NET Core,
+            React and TypeScript, with experience developing web and mobile
+            applications using Node.js, NestJS, PostgreSQL and REST APIs.
+            Interested in cloud and AI development. Currently studying
+            Computer Engineering at Instituto Infnet (expected graduation:
+            2028). Seeking software development opportunities in Canada
+            and remotely.
           </p>
         </section>
 
