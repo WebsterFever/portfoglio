@@ -46,11 +46,11 @@ export default function Header() {
             <h2>
               Full-Stack Software Engineer
               <span> | </span>
+              Java • Spring Boot
+              <span> | </span>
               C#/.NET • ASP.NET Core
               <span> | </span>
               React • TypeScript
-              <span> | </span>
-              Cloud &amp; AI Development
             </h2>
 
             <div className="profile-contact-info">
