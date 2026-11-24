@@ -11,62 +11,35 @@ const API =
   'https://portfolio-production.up.railway.app';
 
 const SKILLS = {
-  Frontend: [
-    'React',
-    'Next.js',
-    'TypeScript',
-    'JavaScript',
-    'HTML5',
-    'CSS3',
-    'Tailwind CSS',
-    'Redux Toolkit',
-    'React Router',
+  "Frontend": [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "Tailwind CSS",
+    "React Native"
   ],
-
-  Backend: [
-    'Java',
-    'Spring Boot',
-    'C#',
-    '.NET',
-    'ASP.NET Core',
-    'Node.js',
-    'NestJS',
-    'Express',
-    'REST APIs',
-    'PostgreSQL',
-    'MongoDB',
-    'Prisma',
-    'JWT Authentication',
+  "Backend": [
+    "Java",
+    "Spring Boot",
+    "C#",
+    ".NET",
+    "ASP.NET Core",
+    "Node.js",
+    "REST APIs"
   ],
-
-  'AI Engineering': [
-    'Generative AI',
-    'LLM Applications',
-    'RAG',
-    'Vector Search',
-    'AI Agents',
-    'Prompt Engineering',
+  "Databases": [
+    "PostgreSQL",
+    "SQL"
   ],
-
-  'Cloud & DevOps': [
-    'Docker',
-    'Docker Compose',
-    'AWS',
-    'Vercel',
-    'Railway',
-    'Git',
-    'GitHub',
-    'CI/CD',
-  ],
-
-  'Testing & Engineering': [
-    'Vitest',
-    'React Testing Library',
-    'API Testing',
-    'Authentication',
-    'Application Security',
-    'Responsive Design',
-  ],
+  "DevOps & Tools": [
+    "Docker",
+    "Git",
+    "GitHub",
+    "CI/CD"
+  ]
 };
 
 // ==========================================
