@@ -24,6 +24,8 @@ const SKILLS = {
   ],
 
   Backend: [
+    'Java',
+    'Spring Boot',
     'C#',
     '.NET',
     'ASP.NET Core',
@@ -254,13 +256,12 @@ export default function App() {
           </div>
 
           <p className="professional-summary">
-            Full-Stack Software Engineer focused on C#/.NET, ASP.NET Core,
-            React and TypeScript, with experience developing web and mobile
-            applications using Node.js, NestJS, PostgreSQL and REST APIs.
-            Interested in cloud and AI development. Currently studying
-            Computer Engineering at Instituto Infnet (expected graduation:
-            2028). Seeking software development opportunities in Canada
-            and remotely.
+            Full-Stack Software Engineer with experience developing web and mobile
+            applications using React, TypeScript, Node.js, NestJS and PostgreSQL.
+            Currently strengthening backend skills in Java, Spring Boot, C#/.NET
+            and ASP.NET Core. Studying Computer Engineering at Instituto Infnet
+            (expected graduation: 2028). Seeking software development opportunities
+            in Canada and remotely.
           </p>
         </section>
 
